@@ -2,13 +2,13 @@ import { expect, browser, $ } from '@wdio/globals';
 import allure from '@wdio/allure-reporter';
 import { testData,errorData,expectedData } from '../../data/loginData';
 
-async function validarMensajedeError(selector, expected, label) {
-  const el = await driver.$(selector);
-  const actual = await el.getText();
-  allure.startStep(`Validar ${label}: se esperaba "${expected}", se obtuvo "${actual}"`);
-  expect(actual).toBe(expected);
+async function validarMensajedeError(clase, esperado, sello) {
+  const el = await driver.$(clase);
+  const actual = await el.getAttribute('contentDescription');
+  allure.startStep(`Validar ${sello}: se esperaba "${esperado}", se obtuvo "${actual}"`);
+  expect(actual).toBe(esperado);
   const screenshot = await browser.takeScreenshot();
-  allure.addAttachment(`${label} ingresado`, Buffer.from(screenshot, 'base64'), 'image/png');
+  allure.addAttachment(`${sello} ingresado`, Buffer.from(screenshot, 'base64'), 'image/png');
   allure.endStep();
 }
 
@@ -97,9 +97,10 @@ describe('Exprezzo App', () => {
     
   });
 
-  it('TC_A_01', async () => {
+  it('TC_A_001', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
+    const err = { ...errorData };
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -115,7 +116,7 @@ describe('Exprezzo App', () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -131,7 +132,7 @@ describe('Exprezzo App', () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -140,13 +141,22 @@ describe('Exprezzo App', () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -155,9 +165,10 @@ describe('Exprezzo App', () => {
 
 });
 
-it('TC_A_02', async () => {
+it('TC_A_002', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
+    const err = { ...errorData };
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -173,7 +184,7 @@ it('TC_A_02', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -189,7 +200,7 @@ it('TC_A_02', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -198,13 +209,22 @@ it('TC_A_02', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -213,13 +233,13 @@ it('TC_A_02', async () => {
 
 });
 
-it('TC_A_03', async () => {
+it('TC_A_003', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -235,7 +255,7 @@ it('TC_A_03', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -251,7 +271,7 @@ it('TC_A_03', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -260,13 +280,22 @@ it('TC_A_03', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -275,13 +304,13 @@ it('TC_A_03', async () => {
 
 });
 
-it('TC_A_04', async () => {
+it('TC_A_004', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -297,7 +326,7 @@ it('TC_A_04', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -313,7 +342,7 @@ it('TC_A_04', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -322,13 +351,22 @@ it('TC_A_04', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -337,13 +375,13 @@ it('TC_A_04', async () => {
 
 });
 
-it('TC_A_05', async () => {
+it('TC_A_005', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -359,7 +397,7 @@ it('TC_A_05', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -375,7 +413,7 @@ it('TC_A_05', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -384,13 +422,22 @@ it('TC_A_05', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -399,13 +446,13 @@ it('TC_A_05', async () => {
 
 });
 
-it('TC_A_06', async () => {
+it('TC_A_006', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -421,7 +468,7 @@ it('TC_A_06', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -437,7 +484,7 @@ it('TC_A_06', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -446,13 +493,22 @@ it('TC_A_06', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -461,13 +517,13 @@ it('TC_A_06', async () => {
 
 });
 
-it('TC_A_07', async () => {
+it('TC_A_007', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -483,7 +539,7 @@ it('TC_A_07', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -499,7 +555,7 @@ it('TC_A_07', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -508,13 +564,22 @@ it('TC_A_07', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -523,13 +588,13 @@ it('TC_A_07', async () => {
 
 });
 
-it('TC_A_08', async () => {
+it('TC_A_008', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -545,7 +610,7 @@ it('TC_A_08', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -561,7 +626,7 @@ it('TC_A_08', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -570,13 +635,22 @@ it('TC_A_08', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -585,13 +659,13 @@ it('TC_A_08', async () => {
 
 });
 
-it('TC_A_09', async () => {
+it('TC_A_009', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -607,7 +681,7 @@ it('TC_A_09', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -623,7 +697,7 @@ it('TC_A_09', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -632,13 +706,22 @@ it('TC_A_09', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -647,13 +730,13 @@ it('TC_A_09', async () => {
 
 });
 
-it('TC_A_10', async () => {
+it('TC_A_010', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -669,7 +752,7 @@ it('TC_A_10', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -685,7 +768,7 @@ it('TC_A_10', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -694,13 +777,22 @@ it('TC_A_10', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -709,13 +801,13 @@ it('TC_A_10', async () => {
 
 });
 
-it('TC_A_11', async () => {
+it('TC_A_011', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -731,7 +823,7 @@ it('TC_A_11', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -747,7 +839,7 @@ it('TC_A_11', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -756,13 +848,22 @@ it('TC_A_11', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -771,13 +872,13 @@ it('TC_A_11', async () => {
 
 });
 
-it('TC_A_12', async () => {
+it('TC_A_012', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -793,7 +894,7 @@ it('TC_A_12', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -809,7 +910,7 @@ it('TC_A_12', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -818,13 +919,22 @@ it('TC_A_12', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -833,13 +943,13 @@ it('TC_A_12', async () => {
 
 });
 
-it('TC_A_13', async () => {
+it('TC_A_013', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -855,7 +965,7 @@ it('TC_A_13', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -871,7 +981,7 @@ it('TC_A_13', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -880,13 +990,22 @@ it('TC_A_13', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -895,13 +1014,13 @@ it('TC_A_13', async () => {
 
 });
 
-it('TC_A_14', async () => {
+it('TC_A_014', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -917,7 +1036,7 @@ it('TC_A_14', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -933,7 +1052,7 @@ it('TC_A_14', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -942,13 +1061,22 @@ it('TC_A_14', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -957,13 +1085,13 @@ it('TC_A_14', async () => {
 
 });
 
-it('TC_A_15', async () => {
+it('TC_A_015', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -979,7 +1107,7 @@ it('TC_A_15', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -995,7 +1123,7 @@ it('TC_A_15', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1004,13 +1132,22 @@ it('TC_A_15', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -1019,13 +1156,13 @@ it('TC_A_15', async () => {
 
 });
 
-it('TC_A_16', async () => {
+it('TC_A_016', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -1041,7 +1178,7 @@ it('TC_A_16', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1057,7 +1194,7 @@ it('TC_A_16', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1066,13 +1203,22 @@ it('TC_A_16', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -1081,13 +1227,13 @@ it('TC_A_16', async () => {
 
 });
 
-it('TC_A_17', async () => {
+it('TC_A_017', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -1103,7 +1249,7 @@ it('TC_A_17', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1119,7 +1265,7 @@ it('TC_A_17', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1128,13 +1274,22 @@ it('TC_A_17', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -1143,13 +1298,13 @@ it('TC_A_17', async () => {
 
 });
 
-it('TC_A_18', async () => {
+it('TC_A_018', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -1165,7 +1320,7 @@ it('TC_A_18', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1181,7 +1336,7 @@ it('TC_A_18', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1190,13 +1345,22 @@ it('TC_A_18', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -1205,13 +1369,13 @@ it('TC_A_18', async () => {
 
 });
 
-it('TC_A_19', async () => {
+it('TC_A_019', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -1227,7 +1391,7 @@ it('TC_A_19', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1243,7 +1407,7 @@ it('TC_A_19', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1252,13 +1416,22 @@ it('TC_A_19', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -1267,13 +1440,13 @@ it('TC_A_19', async () => {
 
 });
 
-it('TC_A_20', async () => {
+it('TC_A_020', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -1289,7 +1462,7 @@ it('TC_A_20', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1305,7 +1478,7 @@ it('TC_A_20', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1314,13 +1487,22 @@ it('TC_A_20', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -1329,13 +1511,13 @@ it('TC_A_20', async () => {
 
 });
 
-it('TC_A_21', async () => {
+it('TC_A_021', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -1351,7 +1533,7 @@ it('TC_A_21', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1367,7 +1549,7 @@ it('TC_A_21', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1376,13 +1558,22 @@ it('TC_A_21', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -1391,13 +1582,13 @@ it('TC_A_21', async () => {
 
 });
 
-it('TC_A_22', async () => {
+it('TC_A_022', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -1413,7 +1604,7 @@ it('TC_A_22', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1429,7 +1620,7 @@ it('TC_A_22', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1438,13 +1629,22 @@ it('TC_A_22', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -1453,13 +1653,13 @@ it('TC_A_22', async () => {
 
 });
 
-it('TC_A_23', async () => {
+it('TC_A_023', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -1475,7 +1675,7 @@ it('TC_A_23', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1491,7 +1691,7 @@ it('TC_A_23', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1500,13 +1700,22 @@ it('TC_A_23', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -1515,13 +1724,13 @@ it('TC_A_23', async () => {
 
 });
 
-it('TC_A_24', async () => {
+it('TC_A_024', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -1537,7 +1746,7 @@ it('TC_A_24', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1553,7 +1762,7 @@ it('TC_A_24', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1562,13 +1771,22 @@ it('TC_A_24', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -1577,13 +1795,13 @@ it('TC_A_24', async () => {
 
 });
 
-it('TC_A_25', async () => {
+it('TC_A_025', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -1599,7 +1817,7 @@ it('TC_A_25', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1615,7 +1833,7 @@ it('TC_A_25', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1624,13 +1842,22 @@ it('TC_A_25', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -1639,13 +1866,13 @@ it('TC_A_25', async () => {
 
 });
 
-it('TC_A_26', async () => {
+it('TC_A_026', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -1661,7 +1888,7 @@ it('TC_A_26', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1677,7 +1904,7 @@ it('TC_A_26', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1686,13 +1913,22 @@ it('TC_A_26', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -1701,13 +1937,13 @@ it('TC_A_26', async () => {
 
 });
 
-it('TC_A_27', async () => {
+it('TC_A_027', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -1723,7 +1959,7 @@ it('TC_A_27', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1739,7 +1975,7 @@ it('TC_A_27', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1748,13 +1984,22 @@ it('TC_A_27', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -1763,13 +2008,13 @@ it('TC_A_27', async () => {
 
 });
 
-it('TC_A_28', async () => {
+it('TC_A_028', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -1785,7 +2030,7 @@ it('TC_A_28', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1801,7 +2046,7 @@ it('TC_A_28', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1810,13 +2055,22 @@ it('TC_A_28', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -1825,13 +2079,13 @@ it('TC_A_28', async () => {
 
 });
 
-it('TC_A_29', async () => {
+it('TC_A_029', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -1847,7 +2101,7 @@ it('TC_A_29', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1863,7 +2117,7 @@ it('TC_A_29', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1872,13 +2126,22 @@ it('TC_A_29', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -1887,13 +2150,13 @@ it('TC_A_29', async () => {
 
 });
 
-it('TC_A_30', async () => {
+it('TC_A_030', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -1909,7 +2172,7 @@ it('TC_A_30', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1925,7 +2188,7 @@ it('TC_A_30', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1934,13 +2197,22 @@ it('TC_A_30', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -1949,13 +2221,13 @@ it('TC_A_30', async () => {
 
 });
 
-it('TC_A_31', async () => {
+it('TC_A_031', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -1971,7 +2243,7 @@ it('TC_A_31', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1987,7 +2259,7 @@ it('TC_A_31', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -1996,13 +2268,22 @@ it('TC_A_31', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2011,13 +2292,13 @@ it('TC_A_31', async () => {
 
 });
 
-it('TC_A_32', async () => {
+it('TC_A_032', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -2033,7 +2314,7 @@ it('TC_A_32', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2049,7 +2330,7 @@ it('TC_A_32', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2058,13 +2339,22 @@ it('TC_A_32', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2073,13 +2363,13 @@ it('TC_A_32', async () => {
 
 });
 
-it('TC_A_33', async () => {
+it('TC_A_033', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -2095,7 +2385,7 @@ it('TC_A_33', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2111,7 +2401,7 @@ it('TC_A_33', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2120,13 +2410,22 @@ it('TC_A_33', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2135,13 +2434,13 @@ it('TC_A_33', async () => {
 
 });
 
-it('TC_A_34', async () => {
+it('TC_A_034', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -2157,7 +2456,7 @@ it('TC_A_34', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2173,7 +2472,7 @@ it('TC_A_34', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2182,13 +2481,22 @@ it('TC_A_34', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2197,13 +2505,13 @@ it('TC_A_34', async () => {
 
 });
 
-it('TC_A_35', async () => {
+it('TC_A_035', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -2219,7 +2527,7 @@ it('TC_A_35', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2235,7 +2543,7 @@ it('TC_A_35', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2244,13 +2552,22 @@ it('TC_A_35', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2259,13 +2576,13 @@ it('TC_A_35', async () => {
 
 });
 
-it('TC_A_36', async () => {
+it('TC_A_036', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -2281,7 +2598,7 @@ it('TC_A_36', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2297,7 +2614,7 @@ it('TC_A_36', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2306,13 +2623,22 @@ it('TC_A_36', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2321,13 +2647,13 @@ it('TC_A_36', async () => {
 
 });
 
-it('TC_A_37', async () => {
+it('TC_A_037', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -2343,7 +2669,7 @@ it('TC_A_37', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2359,7 +2685,7 @@ it('TC_A_37', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2368,13 +2694,22 @@ it('TC_A_37', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2383,13 +2718,13 @@ it('TC_A_37', async () => {
 
 });
 
-it('TC_A_38', async () => {
+it('TC_A_038', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -2405,7 +2740,7 @@ it('TC_A_38', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2421,7 +2756,7 @@ it('TC_A_38', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2430,13 +2765,22 @@ it('TC_A_38', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2445,13 +2789,13 @@ it('TC_A_38', async () => {
 
 });
 
-it('TC_A_39', async () => {
+it('TC_A_039', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -2467,7 +2811,7 @@ it('TC_A_39', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2483,7 +2827,7 @@ it('TC_A_39', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2492,13 +2836,22 @@ it('TC_A_39', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2507,13 +2860,13 @@ it('TC_A_39', async () => {
 
 });
 
-it('TC_A_40', async () => {
+it('TC_A_040', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -2529,7 +2882,7 @@ it('TC_A_40', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2545,7 +2898,7 @@ it('TC_A_40', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2554,13 +2907,22 @@ it('TC_A_40', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2569,13 +2931,13 @@ it('TC_A_40', async () => {
 
 });
 
-it('TC_A_41', async () => {
+it('TC_A_041', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -2591,7 +2953,7 @@ it('TC_A_41', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2607,7 +2969,7 @@ it('TC_A_41', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2616,13 +2978,22 @@ it('TC_A_41', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2631,13 +3002,13 @@ it('TC_A_41', async () => {
 
 });
 
-it('TC_A_42', async () => {
+it('TC_A_042', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -2653,7 +3024,7 @@ it('TC_A_42', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2669,7 +3040,7 @@ it('TC_A_42', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2678,13 +3049,22 @@ it('TC_A_42', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2693,13 +3073,13 @@ it('TC_A_42', async () => {
 
 });
 
-it('TC_A_43', async () => {
+it('TC_A_043', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -2715,7 +3095,7 @@ it('TC_A_43', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2731,7 +3111,7 @@ it('TC_A_43', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2740,13 +3120,22 @@ it('TC_A_43', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2755,13 +3144,13 @@ it('TC_A_43', async () => {
 
 });
 
-it('TC_A_44', async () => {
+it('TC_A_044', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -2777,7 +3166,7 @@ it('TC_A_44', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2793,7 +3182,7 @@ it('TC_A_44', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2802,13 +3191,22 @@ it('TC_A_44', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2817,13 +3215,13 @@ it('TC_A_44', async () => {
 
 });
 
-it('TC_A_45', async () => {
+it('TC_A_045', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -2839,7 +3237,7 @@ it('TC_A_45', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2855,7 +3253,7 @@ it('TC_A_45', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2864,13 +3262,22 @@ it('TC_A_45', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2879,13 +3286,13 @@ it('TC_A_45', async () => {
 
 });
 
-it('TC_A_46', async () => {
+it('TC_A_046', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -2901,7 +3308,7 @@ it('TC_A_46', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2917,7 +3324,7 @@ it('TC_A_46', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2926,13 +3333,22 @@ it('TC_A_46', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2941,13 +3357,13 @@ it('TC_A_46', async () => {
 
 });
 
-it('TC_A_47', async () => {
+it('TC_A_047', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -2963,7 +3379,7 @@ it('TC_A_47', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2979,7 +3395,7 @@ it('TC_A_47', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -2988,13 +3404,22 @@ it('TC_A_47', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3003,13 +3428,13 @@ it('TC_A_47', async () => {
 
 });
 
-it('TC_A_48', async () => {
+it('TC_A_048', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -3025,7 +3450,7 @@ it('TC_A_48', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3041,7 +3466,7 @@ it('TC_A_48', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3050,13 +3475,22 @@ it('TC_A_48', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3065,13 +3499,13 @@ it('TC_A_48', async () => {
 
 });
 
-it('TC_A_49', async () => {
+it('TC_A_049', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -3087,7 +3521,7 @@ it('TC_A_49', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3103,7 +3537,7 @@ it('TC_A_49', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3112,13 +3546,22 @@ it('TC_A_49', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3127,13 +3570,13 @@ it('TC_A_49', async () => {
 
 });
 
-it('TC_A_50', async () => {
+it('TC_A_050', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -3149,7 +3592,7 @@ it('TC_A_50', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3165,7 +3608,7 @@ it('TC_A_50', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3174,13 +3617,22 @@ it('TC_A_50', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3189,13 +3641,13 @@ it('TC_A_50', async () => {
 
 });
 
-it('TC_A_51', async () => {
+it('TC_A_051', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -3211,7 +3663,7 @@ it('TC_A_51', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3227,7 +3679,7 @@ it('TC_A_51', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3236,13 +3688,22 @@ it('TC_A_51', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3251,13 +3712,13 @@ it('TC_A_51', async () => {
 
 });
 
-it('TC_A_52', async () => {
+it('TC_A_052', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -3273,7 +3734,7 @@ it('TC_A_52', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3289,7 +3750,7 @@ it('TC_A_52', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3298,13 +3759,22 @@ it('TC_A_52', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3313,13 +3783,13 @@ it('TC_A_52', async () => {
 
 });
 
-it('TC_A_53', async () => {
+it('TC_A_053', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -3335,7 +3805,7 @@ it('TC_A_53', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3351,7 +3821,7 @@ it('TC_A_53', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3360,13 +3830,22 @@ it('TC_A_53', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3375,13 +3854,13 @@ it('TC_A_53', async () => {
 
 });
 
-it('TC_A_54', async () => {
+it('TC_A_054', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -3397,7 +3876,7 @@ it('TC_A_54', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3413,7 +3892,7 @@ it('TC_A_54', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3422,13 +3901,22 @@ it('TC_A_54', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3437,13 +3925,13 @@ it('TC_A_54', async () => {
 
 });
 
-it('TC_A_55', async () => {
+it('TC_A_055', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -3459,7 +3947,7 @@ it('TC_A_55', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3475,7 +3963,7 @@ it('TC_A_55', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3484,13 +3972,22 @@ it('TC_A_55', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3499,13 +3996,13 @@ it('TC_A_55', async () => {
 
 });
 
-it('TC_A_56', async () => {
+it('TC_A_056', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -3521,7 +4018,7 @@ it('TC_A_56', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3537,7 +4034,7 @@ it('TC_A_56', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3546,13 +4043,22 @@ it('TC_A_56', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3561,13 +4067,13 @@ it('TC_A_56', async () => {
 
 });
 
-it('TC_A_57', async () => {
+it('TC_A_057', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -3583,7 +4089,7 @@ it('TC_A_57', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3599,7 +4105,7 @@ it('TC_A_57', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3608,13 +4114,22 @@ it('TC_A_57', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3623,13 +4138,13 @@ it('TC_A_57', async () => {
 
 });
 
-it('TC_A_58', async () => {
+it('TC_A_058', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -3645,7 +4160,7 @@ it('TC_A_58', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3661,7 +4176,7 @@ it('TC_A_58', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3670,13 +4185,22 @@ it('TC_A_58', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3685,13 +4209,13 @@ it('TC_A_58', async () => {
 
 });
 
-it('TC_A_59', async () => {
+it('TC_A_059', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -3707,7 +4231,7 @@ it('TC_A_59', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3723,7 +4247,7 @@ it('TC_A_59', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3732,13 +4256,22 @@ it('TC_A_59', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3747,13 +4280,13 @@ it('TC_A_59', async () => {
 
 });
 
-it('TC_A_60', async () => {
+it('TC_A_060', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -3769,7 +4302,7 @@ it('TC_A_60', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3785,7 +4318,7 @@ it('TC_A_60', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3794,13 +4327,22 @@ it('TC_A_60', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3809,13 +4351,13 @@ it('TC_A_60', async () => {
 
 });
 
-it('TC_A_61', async () => {
+it('TC_A_061', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -3831,7 +4373,7 @@ it('TC_A_61', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3847,7 +4389,7 @@ it('TC_A_61', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3856,13 +4398,22 @@ it('TC_A_61', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3871,13 +4422,13 @@ it('TC_A_61', async () => {
 
 });
 
-it('TC_A_62', async () => {
+it('TC_A_062', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -3893,7 +4444,7 @@ it('TC_A_62', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3909,7 +4460,7 @@ it('TC_A_62', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3918,13 +4469,22 @@ it('TC_A_62', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3933,13 +4493,13 @@ it('TC_A_62', async () => {
 
 });
 
-it('TC_A_63', async () => {
+it('TC_A_063', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -3955,7 +4515,7 @@ it('TC_A_63', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3971,7 +4531,7 @@ it('TC_A_63', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -3980,13 +4540,22 @@ it('TC_A_63', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3995,13 +4564,13 @@ it('TC_A_63', async () => {
 
 });
 
-it('TC_A_64', async () => {
+it('TC_A_064', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -4017,7 +4586,7 @@ it('TC_A_64', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4033,7 +4602,7 @@ it('TC_A_64', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4042,13 +4611,22 @@ it('TC_A_64', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -4057,13 +4635,13 @@ it('TC_A_64', async () => {
 
 });
 
-it('TC_A_65', async () => {
+it('TC_A_065', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -4079,7 +4657,7 @@ it('TC_A_65', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4095,7 +4673,7 @@ it('TC_A_65', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4104,13 +4682,22 @@ it('TC_A_65', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -4119,13 +4706,13 @@ it('TC_A_65', async () => {
 
 });
 
-it('TC_A_66', async () => {
+it('TC_A_066', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -4141,7 +4728,7 @@ it('TC_A_66', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4157,7 +4744,7 @@ it('TC_A_66', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4166,13 +4753,22 @@ it('TC_A_66', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -4181,13 +4777,13 @@ it('TC_A_66', async () => {
 
 });
 
-it('TC_A_67', async () => {
+it('TC_A_067', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -4203,7 +4799,7 @@ it('TC_A_67', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4219,7 +4815,7 @@ it('TC_A_67', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4228,13 +4824,22 @@ it('TC_A_67', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -4243,13 +4848,13 @@ it('TC_A_67', async () => {
 
 });
 
-it('TC_A_68', async () => {
+it('TC_A_068', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -4265,7 +4870,7 @@ it('TC_A_68', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4281,7 +4886,7 @@ it('TC_A_68', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4290,13 +4895,22 @@ it('TC_A_68', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -4305,13 +4919,13 @@ it('TC_A_68', async () => {
 
 });
 
-it('TC_A_69', async () => {
+it('TC_A_069', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -4327,7 +4941,7 @@ it('TC_A_69', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4343,7 +4957,7 @@ it('TC_A_69', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4352,13 +4966,22 @@ it('TC_A_69', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -4367,13 +4990,13 @@ it('TC_A_69', async () => {
 
 });
 
-it('TC_A_70', async () => {
+it('TC_A_070', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -4389,7 +5012,7 @@ it('TC_A_70', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4405,7 +5028,7 @@ it('TC_A_70', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4414,13 +5037,22 @@ it('TC_A_70', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -4429,13 +5061,13 @@ it('TC_A_70', async () => {
 
 });
 
-it('TC_A_71', async () => {
+it('TC_A_071', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -4451,7 +5083,7 @@ it('TC_A_71', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4467,7 +5099,7 @@ it('TC_A_71', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4476,13 +5108,22 @@ it('TC_A_71', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -4491,13 +5132,13 @@ it('TC_A_71', async () => {
 
 });
 
-it('TC_A_72', async () => {
+it('TC_A_072', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -4513,7 +5154,7 @@ it('TC_A_72', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4529,7 +5170,7 @@ it('TC_A_72', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4538,13 +5179,22 @@ it('TC_A_72', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -4553,13 +5203,13 @@ it('TC_A_72', async () => {
 
 });
 
-it('TC_A_73', async () => {
+it('TC_A_073', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -4575,7 +5225,7 @@ it('TC_A_73', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4591,7 +5241,7 @@ it('TC_A_73', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4600,13 +5250,22 @@ it('TC_A_73', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -4615,13 +5274,13 @@ it('TC_A_73', async () => {
 
 });
 
-it('TC_A_74', async () => {
+it('TC_A_074', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -4637,7 +5296,7 @@ it('TC_A_74', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4653,7 +5312,7 @@ it('TC_A_74', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4662,13 +5321,22 @@ it('TC_A_74', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -4677,13 +5345,13 @@ it('TC_A_74', async () => {
 
 });
 
-it('TC_A_75', async () => {
+it('TC_A_075', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -4699,7 +5367,7 @@ it('TC_A_75', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4715,7 +5383,7 @@ it('TC_A_75', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4724,13 +5392,22 @@ it('TC_A_75', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -4739,13 +5416,13 @@ it('TC_A_75', async () => {
 
 });
 
-it('TC_A_76', async () => {
+it('TC_A_076', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -4761,7 +5438,7 @@ it('TC_A_76', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4777,7 +5454,7 @@ it('TC_A_76', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4786,13 +5463,22 @@ it('TC_A_76', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -4801,13 +5487,13 @@ it('TC_A_76', async () => {
 
 });
 
-it('TC_A_77', async () => {
+it('TC_A_077', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -4823,7 +5509,7 @@ it('TC_A_77', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4839,7 +5525,7 @@ it('TC_A_77', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4848,13 +5534,22 @@ it('TC_A_77', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -4863,13 +5558,13 @@ it('TC_A_77', async () => {
 
 });
 
-it('TC_A_78', async () => {
+it('TC_A_078', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -4885,7 +5580,7 @@ it('TC_A_78', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4901,7 +5596,7 @@ it('TC_A_78', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4910,13 +5605,22 @@ it('TC_A_78', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -4925,13 +5629,13 @@ it('TC_A_78', async () => {
 
 });
 
-it('TC_A_79', async () => {
+it('TC_A_079', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -4947,7 +5651,7 @@ it('TC_A_79', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4963,7 +5667,7 @@ it('TC_A_79', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -4972,13 +5676,22 @@ it('TC_A_79', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -4987,13 +5700,13 @@ it('TC_A_79', async () => {
 
 });
 
-it('TC_A_80', async () => {
+it('TC_A_080', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -5009,7 +5722,7 @@ it('TC_A_80', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5025,7 +5738,7 @@ it('TC_A_80', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5034,13 +5747,22 @@ it('TC_A_80', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -5049,13 +5771,13 @@ it('TC_A_80', async () => {
 
 });
 
-it('TC_A_81', async () => {
+it('TC_A_081', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -5071,7 +5793,7 @@ it('TC_A_81', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5087,7 +5809,7 @@ it('TC_A_81', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5096,13 +5818,22 @@ it('TC_A_81', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -5111,13 +5842,13 @@ it('TC_A_81', async () => {
 
 });
 
-it('TC_A_82', async () => {
+it('TC_A_082', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -5133,7 +5864,7 @@ it('TC_A_82', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5149,7 +5880,7 @@ it('TC_A_82', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5158,13 +5889,22 @@ it('TC_A_82', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -5173,13 +5913,13 @@ it('TC_A_82', async () => {
 
 });
 
-it('TC_A_83', async () => {
+it('TC_A_083', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -5195,7 +5935,7 @@ it('TC_A_83', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5211,7 +5951,7 @@ it('TC_A_83', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5220,13 +5960,22 @@ it('TC_A_83', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -5235,13 +5984,13 @@ it('TC_A_83', async () => {
 
 });
 
-it('TC_A_84', async () => {
+it('TC_A_084', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -5257,7 +6006,7 @@ it('TC_A_84', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5273,7 +6022,7 @@ it('TC_A_84', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5282,13 +6031,22 @@ it('TC_A_84', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -5297,13 +6055,13 @@ it('TC_A_84', async () => {
 
 });
 
-it('TC_A_85', async () => {
+it('TC_A_085', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -5319,7 +6077,7 @@ it('TC_A_85', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5335,7 +6093,7 @@ it('TC_A_85', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5344,13 +6102,22 @@ it('TC_A_85', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -5359,13 +6126,13 @@ it('TC_A_85', async () => {
 
 });
 
-it('TC_A_86', async () => {
+it('TC_A_086', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -5381,7 +6148,7 @@ it('TC_A_86', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5397,7 +6164,7 @@ it('TC_A_86', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5406,13 +6173,22 @@ it('TC_A_86', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -5421,13 +6197,13 @@ it('TC_A_86', async () => {
 
 });
 
-it('TC_A_87', async () => {
+it('TC_A_087', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -5443,7 +6219,7 @@ it('TC_A_87', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5459,7 +6235,7 @@ it('TC_A_87', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5468,13 +6244,22 @@ it('TC_A_87', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -5483,13 +6268,13 @@ it('TC_A_87', async () => {
 
 });
 
-it('TC_A_88', async () => {
+it('TC_A_088', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -5505,7 +6290,7 @@ it('TC_A_88', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5521,7 +6306,7 @@ it('TC_A_88', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5530,13 +6315,22 @@ it('TC_A_88', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -5545,13 +6339,13 @@ it('TC_A_88', async () => {
 
 });
 
-it('TC_A_89', async () => {
+it('TC_A_089', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -5567,7 +6361,7 @@ it('TC_A_89', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5583,7 +6377,7 @@ it('TC_A_89', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5592,13 +6386,22 @@ it('TC_A_89', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -5607,13 +6410,13 @@ it('TC_A_89', async () => {
 
 });
 
-it('TC_A_90', async () => {
+it('TC_A_090', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -5629,7 +6432,7 @@ it('TC_A_90', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5645,7 +6448,7 @@ it('TC_A_90', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5654,13 +6457,22 @@ it('TC_A_90', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -5669,13 +6481,13 @@ it('TC_A_90', async () => {
 
 });
 
-it('TC_A_91', async () => {
+it('TC_A_091', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -5691,7 +6503,7 @@ it('TC_A_91', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5707,7 +6519,7 @@ it('TC_A_91', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5716,13 +6528,22 @@ it('TC_A_91', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -5731,13 +6552,13 @@ it('TC_A_91', async () => {
 
 });
 
-it('TC_A_92', async () => {
+it('TC_A_092', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -5753,7 +6574,7 @@ it('TC_A_92', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5769,7 +6590,7 @@ it('TC_A_92', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5778,13 +6599,22 @@ it('TC_A_92', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -5793,13 +6623,13 @@ it('TC_A_92', async () => {
 
 });
 
-it('TC_A_93', async () => {
+it('TC_A_093', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -5815,7 +6645,7 @@ it('TC_A_93', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5831,7 +6661,7 @@ it('TC_A_93', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5840,13 +6670,22 @@ it('TC_A_93', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -5855,13 +6694,13 @@ it('TC_A_93', async () => {
 
 });
 
-it('TC_A_94', async () => {
+it('TC_A_094', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -5877,7 +6716,7 @@ it('TC_A_94', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5893,7 +6732,7 @@ it('TC_A_94', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5902,13 +6741,22 @@ it('TC_A_94', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -5917,13 +6765,13 @@ it('TC_A_94', async () => {
 
 });
 
-it('TC_A_95', async () => {
+it('TC_A_095', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -5939,7 +6787,7 @@ it('TC_A_95', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5955,7 +6803,7 @@ it('TC_A_95', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -5964,13 +6812,22 @@ it('TC_A_95', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -5979,13 +6836,13 @@ it('TC_A_95', async () => {
 
 });
 
-it('TC_A_96', async () => {
+it('TC_A_096', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -6001,7 +6858,7 @@ it('TC_A_96', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -6017,7 +6874,7 @@ it('TC_A_96', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -6026,13 +6883,22 @@ it('TC_A_96', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -6041,13 +6907,13 @@ it('TC_A_96', async () => {
 
 });
 
-it('TC_A_97', async () => {
+it('TC_A_097', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -6063,7 +6929,7 @@ it('TC_A_97', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -6079,7 +6945,7 @@ it('TC_A_97', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -6088,13 +6954,22 @@ it('TC_A_97', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -6103,13 +6978,13 @@ it('TC_A_97', async () => {
 
 });
 
-it('TC_A_98', async () => {
+it('TC_A_098', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -6125,7 +7000,7 @@ it('TC_A_98', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -6141,7 +7016,7 @@ it('TC_A_98', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -6150,13 +7025,22 @@ it('TC_A_98', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -6165,13 +7049,13 @@ it('TC_A_98', async () => {
 
 });
 
-it('TC_A_99', async () => {
+it('TC_A_099', async () => {
     const tes = { ...testData };
     const expec = { ...expectedData };
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -6187,7 +7071,7 @@ it('TC_A_99', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -6203,7 +7087,7 @@ it('TC_A_99', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -6212,13 +7096,22 @@ it('TC_A_99', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -6233,7 +7126,7 @@ it('TC_A_100', async () => {
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -6249,7 +7142,7 @@ it('TC_A_100', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -6265,7 +7158,7 @@ it('TC_A_100', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -6274,13 +7167,22 @@ it('TC_A_100', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -6295,7 +7197,7 @@ it('TC_A_101', async () => {
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -6311,7 +7213,7 @@ it('TC_A_101', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -6327,7 +7229,7 @@ it('TC_A_101', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -6336,13 +7238,22 @@ it('TC_A_101', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -6357,7 +7268,7 @@ it('TC_A_102', async () => {
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -6373,7 +7284,7 @@ it('TC_A_102', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -6389,7 +7300,7 @@ it('TC_A_102', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -6398,13 +7309,22 @@ it('TC_A_102', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -6419,7 +7339,7 @@ it('TC_A_103', async () => {
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -6435,7 +7355,7 @@ it('TC_A_103', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -6451,7 +7371,7 @@ it('TC_A_103', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -6460,13 +7380,22 @@ it('TC_A_103', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -6481,7 +7410,7 @@ it('TC_A_104', async () => {
     const err = { ...errorData };
     tes.nombre='';
     expec.nombre='';
-    err.nombre='';
+    //err.nombre='';
     
     try {
       await darClicyFoto('//android.widget.TextView[@content-desc="Predicted app: Exprezo"]', 'App Exprezzo');
@@ -6497,7 +7426,7 @@ it('TC_A_104', async () => {
       
       llegaralFinal();
 
-      const pass1 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
+      const pass1 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)");
       await pass1.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -6513,7 +7442,7 @@ it('TC_A_104', async () => {
       
       llegaralFinal();
 
-      const pass2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
+      const pass2 = driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)");
       await pass2.click();
       await driver.pause(500);
       await driver.hideKeyboard();
@@ -6522,13 +7451,22 @@ it('TC_A_104', async () => {
       allure.addArgument('expected value', expectedData.contraseña2);
       allure.endStep();
       await driver.hideKeyboard();
-      
-      await driver.action('pointer').move({ duration: 0, x: 176, y: 1806 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 180, y: 1945 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
-      await driver.action('pointer').move({ duration: 0, x: 479, y: 2113 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
 
-      llegaralPrincipio();
-      llegaralFinal();
+      const termsCheckbox = await driver.$(
+      'android=new UiSelector().descriptionContains("términos y condiciones")');
+      await termsCheckbox.click();
+      const isChecked1 = await termsCheckbox.getAttribute("checked");
+
+      const termsCheckbox2 = await driver.$(
+      'android=new UiSelector().descriptionContains("políticas de privacidad.")');
+      await termsCheckbox2.click();
+      const isChecked2 = await termsCheckbox.getAttribute("checked");
+
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+     await llegaralPrincipio();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
+      await llegaralFinal();
+      //await validarMensajedeError('//android.view.View[@content-desc="Ingrese su nombre"]',err.nombre,'Nombre');
     } catch (error) {
       const errorShot = await browser.takeScreenshot();
       allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
