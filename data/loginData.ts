@@ -1,27 +1,27 @@
 export const testData = {
-  nombre: 'Reyes',
-  apellidoPaterno: 'Arenas',
-  apellidoMaterno: 'Morales',
-  telefono: '5563175580',
-  correo: 'rarenas@asezor.com',
+  nombre: 'Saul',
+  apellidoPaterno: 'Solis',
+  apellidoMaterno: 'Granados',
+  telefono: '4427152965',
+  correo: 'saulsolisg@outlook.com',
   codigopostal: '02130',
   contraseña1: 'Clave1234',
   contraseña2: 'Clave1234',
   sucursal: 'ZSJ',
-  numCliente: '002660143',
+  numCliente: '000001024',
 };
 
 export const expectedData = {
-  nombre: 'Reyes',
-  apellidoPaterno: 'Arenas',
-  apellidoMaterno: 'Morales',
-  telefono: '5563175580',
-  correo: 'rarenas@asezor.com',
+  nombre: 'Saul',
+  apellidoPaterno: 'Solis',
+  apellidoMaterno: 'Granados',
+  telefono: '4427152965',
+  correo: 'saulsolisg@outlook.com',
   codigopostal: '02130',
   contraseña1: 'Clave1234',
   contraseña2: 'Clave1234',
   sucursal: 'ZSJ',
-  numCliente: '002660143',
+  numCliente: '000001024',
 };
 
 export const errorData = {
