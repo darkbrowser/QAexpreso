@@ -618,7 +618,46 @@ it('TC_A_015 nombre con 31 caracteres', async () => {
   }
 });
 
-it('TC_A_016', async () => {
+it('TC_A_016 apellido paterno numerico', async () => {
+  const tes = { ...testData };
+  const expec = { ...expectedData };
+  const err = { ...errorData };
+  tes.apellidoPaterno = '12345678';
+  expec.apellidoPaterno = '12345678';
+  err.apellidoPaterno = 'Solo se permiten letras';
+  try {
+    await gotoExprezo();
+    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
+    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[2]', tes.apellidoPaterno, 'apellido paterno', expec.apellidoPaterno);
+    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[3]', tes.apellidoMaterno, 'apellido materno', expec.apellidoMaterno);
+    await darClicyFoto('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.view.View[1]', 'Selector de fecha');
+    await darClicyFoto('//android.widget.Button[@content-desc="Aceptar"]', 'Botón Aceptar fecha');
+    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[4]', tes.telefono, 'teléfono', expec.telefono);
+    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[5]', tes.correo, 'correo', expec.correo);
+    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[6]', tes.codigopostal, 'Codigo Postal', expec.codigopostal);
+    llegaralFinal();
+    await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)", tes.contraseña1, 'Password', expec.contraseña1);
+    await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)", tes.contraseña2, 'Password', expec.contraseña2);
+    await selectSucursal();
+    llegaralFinal();
+    const termsCheckbox1 = await driver.$('android=new UiSelector().descriptionContains("términos y condiciones")');
+    await termsCheckbox1.click();
+    const isChecked1 = await termsCheckbox1.getAttribute("checked");
+    const termsCheckbox2 = await driver.$('android=new UiSelector().descriptionContains("políticas de privacidad.")');
+    await termsCheckbox2.click();
+    const isChecked2 = await termsCheckbox2.getAttribute("checked");
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+    await llegaralPrincipio();
+    await validarMensajedeError('//android.view.View[@content-desc="Solo se permiten letras"])[1]',err.apellidoPaterno,'Solo se permiten letras');
+    await llegaralFinal();
+  } catch (error) {
+    const errorShot = await browser.takeScreenshot();
+    allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
+    throw error;
+  }
+});
+
+it('TC_A_017 apellido paterno Solo se permiten letras', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
@@ -648,7 +687,7 @@ it('TC_A_016', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="Ingrese su Apellido"])[1]',err.apellidoPaterno,'Apellido Paterno');
+    await validarMensajedeError('//android.view.View[@content-desc="Solo se permiten letras"])[1]',err.apellidoPaterno,'Solo se permiten letras');
     await llegaralFinal();
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
@@ -657,13 +696,13 @@ it('TC_A_016', async () => {
   }
 });
 
-it('TC_A_017', async () => {
+it('TC_A_018 apellido paterno campos requeridos', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
   tes.apellidoPaterno = '';
   expec.apellidoPaterno = '';
-  err.apellidoPaterno = '';
+  err.apellidoPaterno = 'Valida que los campos requeridos cumplan con la información solicitada';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -687,7 +726,7 @@ it('TC_A_017', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="Ingrese su Apellido"])[1]',err.apellidoPaterno,'Apellido Paterno');
+    await validarMensajedeError('//android.view.View[@content-desc="Valida que los campos requeridos cumplan con la información solicitada"])[1]',err.apellidoPaterno,'Apellido Paterno');
     await llegaralFinal();
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
@@ -696,13 +735,12 @@ it('TC_A_017', async () => {
   }
 });
 
-it('TC_A_018', async () => {
+it('TC_A_019 apellido paterno Ingrese su Apellido', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
   tes.apellidoPaterno = '';
   expec.apellidoPaterno = '';
-  err.apellidoPaterno = '';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -726,7 +764,7 @@ it('TC_A_018', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="Ingrese su Apellido"])[1]',err.apellidoPaterno,'Apellido Paterno');
+    await validarMensajedeError('//android.view.View[@content-desc="Ingrese su Apellido"])[1]',err.apellidoPaterno,'Ingrese su Apellido');
     await llegaralFinal();
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
@@ -735,13 +773,13 @@ it('TC_A_018', async () => {
   }
 });
 
-it('TC_A_019', async () => {
+it('TC_A_020 apellido paterno Solo se premiten letras', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.apellidoPaterno = '';
+  tes.apellidoPaterno = '@#%$asdf';
   expec.apellidoPaterno = '';
-  err.apellidoPaterno = '';
+  err.apellidoPaterno = 'Solo se permiten letras';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -765,7 +803,7 @@ it('TC_A_019', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="Ingrese su Apellido"])[1]',err.apellidoPaterno,'Apellido Paterno');
+    await validarMensajedeError('//android.view.View[@content-desc="Solo se permiten letras"])[1]',err.apellidoPaterno,'Solo se permiten letras');
     await llegaralFinal();
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
@@ -774,52 +812,13 @@ it('TC_A_019', async () => {
   }
 });
 
-it('TC_A_020', async () => {
+it('TC_A_021 apellido paterno a 30 caracteres', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.apellidoPaterno = '';
-  expec.apellidoPaterno = '';
-  err.apellidoPaterno = '';
-  try {
-    await gotoExprezo();
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[2]', tes.apellidoPaterno, 'apellido paterno', expec.apellidoPaterno);
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[3]', tes.apellidoMaterno, 'apellido materno', expec.apellidoMaterno);
-    await darClicyFoto('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.view.View[1]', 'Selector de fecha');
-    await darClicyFoto('//android.widget.Button[@content-desc="Aceptar"]', 'Botón Aceptar fecha');
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[4]', tes.telefono, 'teléfono', expec.telefono);
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[5]', tes.correo, 'correo', expec.correo);
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[6]', tes.codigopostal, 'Codigo Postal', expec.codigopostal);
-    llegaralFinal();
-    await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)", tes.contraseña1, 'Password', expec.contraseña1);
-    await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)", tes.contraseña2, 'Password', expec.contraseña2);
-    await selectSucursal();
-    llegaralFinal();
-    const termsCheckbox1 = await driver.$('android=new UiSelector().descriptionContains("términos y condiciones")');
-    await termsCheckbox1.click();
-    const isChecked1 = await termsCheckbox1.getAttribute("checked");
-    const termsCheckbox2 = await driver.$('android=new UiSelector().descriptionContains("políticas de privacidad.")');
-    await termsCheckbox2.click();
-    const isChecked2 = await termsCheckbox2.getAttribute("checked");
-    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
-    await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="Ingrese su Apellido"])[1]',err.apellidoPaterno,'Apellido Paterno');
-    await llegaralFinal();
-  } catch (error) {
-    const errorShot = await browser.takeScreenshot();
-    allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
-    throw error;
-  }
-});
-
-it('TC_A_021', async () => {
-  const tes = { ...testData };
-  const expec = { ...expectedData };
-  const err = { ...errorData };
-  tes.apellidoPaterno = '';
-  expec.apellidoPaterno = '';
-  err.apellidoPaterno = '';
+  tes.apellidoPaterno = 'aaaaaaaaaabbbbbbbbbbcccccccccc';
+  expec.apellidoPaterno = 'aaaaaaaaaabbbbbbbbbbcccccccccc';
+  err.apellidoPaterno = '30/30';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -851,13 +850,13 @@ it('TC_A_021', async () => {
   }
 });
 
-it('TC_A_022', async () => {
+it('TC_A_022 apellido paterno a 29 caracteres', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.apellidoPaterno = '';
-  expec.apellidoPaterno = '';
-  err.apellidoPaterno = '';
+  tes.apellidoPaterno = 'aaaaaaaaaabbbbbbbbbbccccccccc';
+  expec.apellidoPaterno = 'aaaaaaaaaabbbbbbbbbbccccccccc';
+  err.apellidoPaterno = '29/30';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -889,13 +888,13 @@ it('TC_A_022', async () => {
   }
 });
 
-it('TC_A_023', async () => {
+it('TC_A_023 apellido paterno a 31 caracteres', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.apellidoPaterno = '';
-  expec.apellidoPaterno = '';
-  err.apellidoPaterno = '';
+  tes.apellidoPaterno = 'aaaaaaaaaabbbbbbbbbbccccccccccd';
+  expec.apellidoPaterno = 'aaaaaaaaaabbbbbbbbbbccccccccccd';
+  err.apellidoPaterno = '30/30';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
