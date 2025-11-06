@@ -154,7 +154,7 @@ it('TC_A_002 alta usuario cliente red', async () => {
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[5]', tes.correo, 'correo', expec.correo);
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[6]', tes.codigopostal, 'Codigo Postal', expec.codigopostal);
     llegaralFinal();
-    await fijarvariableconPasos('-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(3)', tes.numCliente, 'teléfono', expec.numCliente);
+    await fijarvariableconPasos('-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(3)', tes.numCliente, 'Num Cliente', expec.numCliente);
     await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)", tes.contraseña1, 'Password', expec.contraseña1);
     await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)", tes.contraseña2, 'Password', expec.contraseña2);
     await selectSucursal();
@@ -1770,13 +1770,90 @@ it('TC_A_045 telefono con letras', async () => {
   }
 });
 
-it('TC_A_046', async () => {
+it('TC_A_046 codigo postal invalido', async () => {
+  const tes = { ...testData };
+  const expec = { ...expectedData };
+  const err = { ...errorData };
+  tes.correo = '00000';
+  expec.correo = '00000';
+  err.correo = 'Por el momento no estamos en tu localidad';
+  try {
+    await gotoExprezo();
+    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
+    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[2]', tes.apellidoPaterno, 'apellido paterno', expec.apellidoPaterno);
+    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[3]', tes.apellidoMaterno, 'apellido materno', expec.apellidoMaterno);
+    await darClicyFoto('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.view.View[1]', 'Selector de fecha');
+    await darClicyFoto('//android.widget.Button[@content-desc="Aceptar"]', 'Botón Aceptar fecha');
+    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[4]', tes.telefono, 'teléfono', expec.telefono);
+    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[5]', tes.correo, 'correo', expec.correo);
+    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[6]', tes.codigopostal, 'Codigo Postal', expec.codigopostal);
+    llegaralFinal();
+    await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)", tes.contraseña1, 'Password', expec.contraseña1);
+    await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)", tes.contraseña2, 'Password', expec.contraseña2);
+    await selectSucursal();
+    llegaralFinal();
+    const termsCheckbox1 = await driver.$('android=new UiSelector().descriptionContains("términos y condiciones")');
+    await termsCheckbox1.click();
+    const isChecked1 = await termsCheckbox1.getAttribute("checked");
+    const termsCheckbox2 = await driver.$('android=new UiSelector().descriptionContains("políticas de privacidad.")');
+    await termsCheckbox2.click();
+    const isChecked2 = await termsCheckbox2.getAttribute("checked");
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+    await llegaralPrincipio();
+    await validarMensajedeError('//android.view.View[@content-desc="Por el momento no estamos en tu localidad"]',err.correo,'Correo Invalido');
+    await llegaralFinal();
+  } catch (error) {
+    const errorShot = await browser.takeScreenshot();
+    allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
+    throw error;
+  }
+});
+
+it('TC_A_047 codigo posta mensaje campos requeridos', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
   tes.correo = '';
   expec.correo = '';
-  err.correo = '';
+  err.correo = 'Valida que los campos requeridos cumplan con la información solicitada';
+  try {
+    await gotoExprezo();
+    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
+    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[2]', tes.apellidoPaterno, 'apellido paterno', expec.apellidoPaterno);
+    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[3]', tes.apellidoMaterno, 'apellido materno', expec.apellidoMaterno);
+    await darClicyFoto('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.view.View[1]', 'Selector de fecha');
+    await darClicyFoto('//android.widget.Button[@content-desc="Aceptar"]', 'Botón Aceptar fecha');
+    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[4]', tes.telefono, 'teléfono', expec.telefono);
+    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[5]', tes.correo, 'correo', expec.correo);
+    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[6]', tes.codigopostal, 'Codigo Postal', expec.codigopostal);
+    llegaralFinal();
+    await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)", tes.contraseña1, 'Password', expec.contraseña1);
+    await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)", tes.contraseña2, 'Password', expec.contraseña2);
+    await selectSucursal();
+    llegaralFinal();
+    const termsCheckbox1 = await driver.$('android=new UiSelector().descriptionContains("términos y condiciones")');
+    await termsCheckbox1.click();
+    const isChecked1 = await termsCheckbox1.getAttribute("checked");
+    const termsCheckbox2 = await driver.$('android=new UiSelector().descriptionContains("políticas de privacidad.")');
+    await termsCheckbox2.click();
+    const isChecked2 = await termsCheckbox2.getAttribute("checked");
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
+    await llegaralPrincipio();
+    await validarMensajedeError('//android.view.View[@content-desc="Valida que los campos requeridos cumplan con la información solicitada"]',err.correo,'Campos requeridos');
+    await llegaralFinal();
+  } catch (error) {
+    const errorShot = await browser.takeScreenshot();
+    allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
+    throw error;
+  }
+});
+
+it('TC_A_048 codigo postal vacio', async () => {
+  const tes = { ...testData };
+  const expec = { ...expectedData };
+  const err = { ...errorData };
+  tes.correo = '';
+  expec.correo = '';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -1809,13 +1886,13 @@ it('TC_A_046', async () => {
   }
 });
 
-it('TC_A_047', async () => {
+it('TC_A_049 correo a 4 digitos', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.correo = '';
-  expec.correo = '';
-  err.correo = '';
+  tes.correo = '1234';
+  expec.correo = '1234';
+  err.correo = 'es muy corto, 5 numeros';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -1839,85 +1916,7 @@ it('TC_A_047', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="Requerido"]',err.correo,'Correo');
-    await llegaralFinal();
-  } catch (error) {
-    const errorShot = await browser.takeScreenshot();
-    allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
-    throw error;
-  }
-});
-
-it('TC_A_048', async () => {
-  const tes = { ...testData };
-  const expec = { ...expectedData };
-  const err = { ...errorData };
-  tes.correo = '';
-  expec.correo = '';
-  err.correo = '';
-  try {
-    await gotoExprezo();
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[2]', tes.apellidoPaterno, 'apellido paterno', expec.apellidoPaterno);
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[3]', tes.apellidoMaterno, 'apellido materno', expec.apellidoMaterno);
-    await darClicyFoto('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.view.View[1]', 'Selector de fecha');
-    await darClicyFoto('//android.widget.Button[@content-desc="Aceptar"]', 'Botón Aceptar fecha');
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[4]', tes.telefono, 'teléfono', expec.telefono);
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[5]', tes.correo, 'correo', expec.correo);
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[6]', tes.codigopostal, 'Codigo Postal', expec.codigopostal);
-    llegaralFinal();
-    await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)", tes.contraseña1, 'Password', expec.contraseña1);
-    await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)", tes.contraseña2, 'Password', expec.contraseña2);
-    await selectSucursal();
-    llegaralFinal();
-    const termsCheckbox1 = await driver.$('android=new UiSelector().descriptionContains("términos y condiciones")');
-    await termsCheckbox1.click();
-    const isChecked1 = await termsCheckbox1.getAttribute("checked");
-    const termsCheckbox2 = await driver.$('android=new UiSelector().descriptionContains("políticas de privacidad.")');
-    await termsCheckbox2.click();
-    const isChecked2 = await termsCheckbox2.getAttribute("checked");
-    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
-    await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="Requerido"]',err.correo,'Correo');
-    await llegaralFinal();
-  } catch (error) {
-    const errorShot = await browser.takeScreenshot();
-    allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
-    throw error;
-  }
-});
-
-it('TC_A_049', async () => {
-  const tes = { ...testData };
-  const expec = { ...expectedData };
-  const err = { ...errorData };
-  tes.correo = '';
-  expec.correo = '';
-  err.correo = '';
-  try {
-    await gotoExprezo();
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[2]', tes.apellidoPaterno, 'apellido paterno', expec.apellidoPaterno);
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[3]', tes.apellidoMaterno, 'apellido materno', expec.apellidoMaterno);
-    await darClicyFoto('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.view.View[1]', 'Selector de fecha');
-    await darClicyFoto('//android.widget.Button[@content-desc="Aceptar"]', 'Botón Aceptar fecha');
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[4]', tes.telefono, 'teléfono', expec.telefono);
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[5]', tes.correo, 'correo', expec.correo);
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[6]', tes.codigopostal, 'Codigo Postal', expec.codigopostal);
-    llegaralFinal();
-    await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)", tes.contraseña1, 'Password', expec.contraseña1);
-    await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)", tes.contraseña2, 'Password', expec.contraseña2);
-    await selectSucursal();
-    llegaralFinal();
-    const termsCheckbox1 = await driver.$('android=new UiSelector().descriptionContains("términos y condiciones")');
-    await termsCheckbox1.click();
-    const isChecked1 = await termsCheckbox1.getAttribute("checked");
-    const termsCheckbox2 = await driver.$('android=new UiSelector().descriptionContains("políticas de privacidad.")');
-    await termsCheckbox2.click();
-    const isChecked2 = await termsCheckbox2.getAttribute("checked");
-    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
-    await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="Requerido"]',err.correo,'Correo');
+    await validarMensajedeError('//android.view.View[@content-desc="es muy corto, 5 numeros"]',err.correo,'Longitud');
     await llegaralFinal();
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
@@ -1930,8 +1929,8 @@ it('TC_A_050', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.correo = '';
-  expec.correo = '';
+  tes.correo = '54180';
+  expec.correo = '54180';
   err.correo = '';
   try {
     await gotoExprezo();
@@ -1969,8 +1968,8 @@ it('TC_A_051', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.nombre = '';
-  expec.nombre = '';
+  tes.correo = '54180';
+  expec.correo = '54180';
   err.nombre = '';
   try {
     await gotoExprezo();
@@ -2007,8 +2006,8 @@ it('TC_A_052', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.nombre = '';
-  expec.nombre = '';
+  tes.correo = '54180';
+  expec.correo = '54180';
   err.nombre = '';
   try {
     await gotoExprezo();
@@ -2041,13 +2040,13 @@ it('TC_A_052', async () => {
   }
 });
 
-it('TC_A_053', async () => {
+it('TC_A_053 Numero de cliente ingresar texto', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.numCliente = '';
-  expec.numCliente = '';
-  err.numCliente = '';
+  tes.numCliente = 'asdfghjkl';
+  expec.numCliente = 'asdfghjkl';
+  err.numCliente = '0/9';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -2059,6 +2058,7 @@ it('TC_A_053', async () => {
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[5]', tes.correo, 'correo', expec.correo);
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[6]', tes.codigopostal, 'Codigo Postal', expec.codigopostal);
     llegaralFinal();
+    await fijarvariableconPasos('-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(3)', tes.numCliente, 'Num Cliente', expec.numCliente);
     await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)", tes.contraseña1, 'Password', expec.contraseña1);
     await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)", tes.contraseña2, 'Password', expec.contraseña2);
     await selectSucursal();
@@ -2096,6 +2096,7 @@ it('TC_A_054 Num Cliente a 9 digitos', async () => {
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[5]', tes.correo, 'correo', expec.correo);
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[6]', tes.codigopostal, 'Codigo Postal', expec.codigopostal);
     llegaralFinal();
+    await fijarvariableconPasos('-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(3)', tes.numCliente, 'Num Cliente', expec.numCliente);
     await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)", tes.contraseña1, 'Password', expec.contraseña1);
     await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)", tes.contraseña2, 'Password', expec.contraseña2);
     await selectSucursal();
@@ -2133,6 +2134,7 @@ it('TC_A_055 Num Cliente a 8 digitos', async () => {
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[5]', tes.correo, 'correo', expec.correo);
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[6]', tes.codigopostal, 'Codigo Postal', expec.codigopostal);
     llegaralFinal();
+    await fijarvariableconPasos('-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(3)', tes.numCliente, 'Num Cliente', expec.numCliente);
     await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)", tes.contraseña1, 'Password', expec.contraseña1);
     await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)", tes.contraseña2, 'Password', expec.contraseña2);
     await selectSucursal();
@@ -2170,6 +2172,7 @@ it('TC_A_056 Num Cliente a 10 digitos', async () => {
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[5]', tes.correo, 'correo', expec.correo);
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[6]', tes.codigopostal, 'Codigo Postal', expec.codigopostal);
     llegaralFinal();
+    await fijarvariableconPasos('-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(3)', tes.numCliente, 'Num Cliente', expec.numCliente);
     await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)", tes.contraseña1, 'Password', expec.contraseña1);
     await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)", tes.contraseña2, 'Password', expec.contraseña2);
     await selectSucursal();
@@ -2189,13 +2192,13 @@ it('TC_A_056 Num Cliente a 10 digitos', async () => {
   }
 });
 
-it('TC_A_057', async () => {
+it('TC_A_057 contraseña mensaje ingresar contraseña', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
   tes.contraseña1 = '';
   expec.contraseña1 = '';
-  err.contraseña1 = '';
+  err.contraseña1 = 'Ingrese su contraseña';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
