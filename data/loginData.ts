@@ -9,6 +9,7 @@ export const testData = {
   contraseña2: 'Clave1234',
   sucursal: 'ZSJ',
   numCliente: '000001024',
+  codigoAlta: '123456'
 };
 
 export const expectedData = {
@@ -22,6 +23,7 @@ export const expectedData = {
   contraseña2: 'Clave1234',
   sucursal: 'ZSJ',
   numCliente: '000001024',
+  codigoAlta: '123456'
 };
 
 export const errorData = {
@@ -30,9 +32,11 @@ export const errorData = {
   apellidoMaterno: 'Ingrese su Apellido',
   telefono: 'Ingrese su teléfono',
   correo: 'Requerido',
-  codigopostal: 'Ingreso su código postal',
+  codigopostal: 'Ingrese su código postal',
   contraseña1: 'Solo acepta numeros',
   contraseña2: 'Repita su contrasena',
   sucursal: 'Debes seleccionar una sucursal',
   numCliente: '',
+  fecha: 'Es requerido',
+  codigoAlta: 'Código incorrecto, por favor intente de nuevo.'
 };
