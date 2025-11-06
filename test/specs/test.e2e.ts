@@ -2229,13 +2229,13 @@ it('TC_A_057 contraseña mensaje ingresar contraseña', async () => {
   }
 });
 
-it('TC_A_058', async () => {
+it('TC_A_058 contraseña menor a 8 digitos', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.contraseña1 = '';
-  expec.contraseña1 = '';
-  err.contraseña1 = '';
+  tes.contraseña1 = 'clave12';
+  expec.contraseña1 = 'clave12';
+  err.contraseña1 = 'su contraseña debe ser almenos 8 caracteres';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -2258,7 +2258,7 @@ it('TC_A_058', async () => {
     await termsCheckbox2.click();
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
-    await validarMensajedeError('//android.view.View[@content-desc="Ingrese su contraseña"]',err.contraseña1,'Contrasena');
+    await validarMensajedeError('//android.view.View[@content-desc="su contraseña debe ser almenos 8 caracteres"]',err.contraseña1,'Min 8 caracteres');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2303,13 +2303,13 @@ it('TC_A_059', async () => {
   }
 });
 
-it('TC_A_060', async () => {
+it('TC_A_060 contrasena mensaje campos requeridos', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
   tes.contraseña1 = '';
   expec.contraseña1 = '';
-  err.contraseña1 = '';
+  err.contraseña1 = 'Valida que los campos requeridos cumplan con la información solicitada';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -2332,7 +2332,7 @@ it('TC_A_060', async () => {
     await termsCheckbox2.click();
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
-    await validarMensajedeError('//android.view.View[@content-desc="Ingrese su contraseña"]',err.contraseña1,'Contrasena');
+    await validarMensajedeError('//android.view.View[@content-desc="Valida que los campos requeridos cumplan con la información solicitada"]',err.contraseña1,'Contrasena');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2340,13 +2340,13 @@ it('TC_A_060', async () => {
   }
 });
 
-it('TC_A_061', async () => {
+it('TC_A_061 contrasena al menos 8 caracteres', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.contraseña1 = '';
-  expec.contraseña1 = '';
-  err.contraseña1 = '';
+  tes.contraseña1 = '1234567';
+  expec.contraseña1 = '1234567';
+  err.contraseña1 = 'su contraseña debe ser al menos 8 caracteres';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -2369,7 +2369,7 @@ it('TC_A_061', async () => {
     await termsCheckbox2.click();
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
-    await validarMensajedeError('//android.view.View[@content-desc="Ingrese su contraseña"]',err.contraseña1,'Contrasena');
+    await validarMensajedeError('//android.view.View[@content-desc="su contraseña debe ser al menos 8 caracteres"]',err.contraseña1,'Contrasena');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2377,13 +2377,13 @@ it('TC_A_061', async () => {
   }
 });
 
-it('TC_A_062', async () => {
+it('TC_A_062 contrasena campos requeridos', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.contraseña1 = '';
-  expec.contraseña1 = '';
-  err.contraseña1 = '';
+  tes.contraseña1 = ' ';
+  expec.contraseña1 = ' ';
+  err.contraseña1 = 'Valida que los campos requeridos cumplan con la información solicitada';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -2406,7 +2406,7 @@ it('TC_A_062', async () => {
     await termsCheckbox2.click();
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
-    await validarMensajedeError('//android.view.View[@content-desc="Ingrese su contraseña"]',err.contraseña1,'Contrasena');
+    await validarMensajedeError('//android.view.View[@content-desc="Valida que los campos requeridos cumplan con la información solicitada"]',err.contraseña1,'Contrasena');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2414,13 +2414,13 @@ it('TC_A_062', async () => {
   }
 });
 
-it('TC_A_063', async () => {
+it('TC_A_063 contrasena al menos 8 caracteres', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.contraseña1 = '';
-  expec.contraseña1 = '';
-  err.contraseña1 = '';
+  tes.contraseña1 = ' ';
+  expec.contraseña1 = ' ';
+  err.contraseña1 = 'su contraseña debe ser al menos 8 caracteres';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -2443,7 +2443,7 @@ it('TC_A_063', async () => {
     await termsCheckbox2.click();
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
-    await validarMensajedeError('//android.view.View[@content-desc="Ingrese su contraseña"]',err.contraseña1,'Contrasena');
+    await validarMensajedeError('//android.view.View[@content-desc="su contraseña debe ser al menos 8 caracteres"]',err.contraseña1,'Contrasena');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2451,13 +2451,13 @@ it('TC_A_063', async () => {
   }
 });
 
-it('TC_A_064', async () => {
+it('TC_A_064 contraseña caracteres especiales', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.contraseña1 = '';
-  expec.contraseña1 = '';
-  err.contraseña1 = '';
+  tes.contraseña1 = 'Cl@ve.123';
+  expec.contraseña1 = 'Cl@ve.123';
+  err.contraseña1 = 'Verificar mi cuenta';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -2480,7 +2480,7 @@ it('TC_A_064', async () => {
     await termsCheckbox2.click();
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
-    await validarMensajedeError('//android.view.View[@content-desc="Ingrese su contraseña"]',err.contraseña1,'Contrasena');
+    await validarMensajedeError('///android.widget.Button[@content-desc="Verificar mi cuenta"]',err.contraseña1,'Contrasena');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2492,9 +2492,9 @@ it('TC_A_065', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.contraseña1 = '';
-  expec.contraseña1 = '';
-  err.contraseña1 = '';
+  tes.contraseña2 = '';
+  expec.contraseña2 = '';
+  err.contraseña2 = '';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -2525,13 +2525,13 @@ it('TC_A_065', async () => {
   }
 });
 
-it('TC_A_066', async () => {
+it('TC_A_066 confirmar contrasena campos requeridos', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
   tes.contraseña1 = '';
   expec.contraseña1 = '';
-  err.contraseña1 = '';
+  err.contraseña1 = 'Valida que los campos requeridos cumplan con la información solicitada';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -2562,13 +2562,13 @@ it('TC_A_066', async () => {
   }
 });
 
-it('TC_A_067', async () => {
+it('TC_A_067 confirmar contrasena vacia', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
   tes.contraseña1 = '';
   expec.contraseña1 = '';
-  err.contraseña1 = '';
+  err.contraseña1 = 'Valida que los campos requeridos cumplan con la información solicitada';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -2591,7 +2591,7 @@ it('TC_A_067', async () => {
     await termsCheckbox2.click();
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
-    await validarMensajedeError('//android.view.View[@content-desc="Ingrese de nuevo su contraseña"]',err.contraseña1,'Confirmar Contrasena');
+    await validarMensajedeError('//android.view.View[@content-desc="Valida que los campos requeridos cumplan con la información solicitada"]',err.contraseña1,'Confirmar Contrasena');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
