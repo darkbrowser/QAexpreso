@@ -91,7 +91,7 @@ describe('Exprezzo App', () => {
     await driver.terminateApp("com.android.chrome");
     await driver.terminateApp("mx.com.zorroabarrotero.zorro_expres_app");
   });
-
+  
 it('TC_A_001 alta cliente invitado', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
@@ -2250,7 +2250,7 @@ it('TC_A_058 contraseña menor a 8 digitos', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await validarMensajedeError('//android.view.View[@content-desc="Su contraseña debe ser almenos 8 caracteres"]',err.contraseña1,'Min 8 caracteres');
-  } catch (error) {"
+  } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
     throw error;
