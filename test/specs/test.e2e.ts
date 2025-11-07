@@ -29,14 +29,12 @@ async function fijarvariableconPasos(clase, valor, nombre, esperado) {
       const el = await driver.$(clase);
       allure.startStep(`Ingresar ${nombre}: ${valor}`);    
       await el.click();
-      // await driver.pause(500);
       await driver.hideKeyboard();
       await el.setValue(valor);
       expect(valor).toBe(esperado);
       allure.addStep(`Validación exitosa: ${nombre} = "${valor}"`);
       allure.addLabel('input-field', valor);
       allure.addArgument('expected value', esperado);
-      allure.endStep();
   const screenshot = await browser.takeScreenshot();
   allure.addAttachment(`${nombre} ingresado`, Buffer.from(screenshot, 'base64'), 'image/png');
   allure.endStep();
@@ -53,7 +51,6 @@ async function insertarContrasena(clase, valor, nombre, esperado) {
       allure.addStep(`Validación exitosa: ${nombre} = "${valor}"`);
       allure.addLabel('input-field', valor);
       allure.addArgument('expected value', esperado);
-      allure.endStep();
   const screenshot = await browser.takeScreenshot();
   allure.addAttachment(`${nombre} ingresado`, Buffer.from(screenshot, 'base64'), 'image/png');
   allure.endStep();
@@ -81,7 +78,6 @@ async function gotoExprezo() {
 }
 
 
-
 describe('Exprezzo App', () => {
   before(async () => {
     allure.addEnvironment('Plataforma', 'Android');
@@ -91,13 +87,10 @@ describe('Exprezzo App', () => {
   });
 
   beforeEach(async () => {
-    //minimiza y cierra apps antes de abrir la de exprezo
     await driver.executeScript('mobile:pressKey', [{ keycode: 3 }]);
     await driver.terminateApp("com.android.chrome");
     await driver.terminateApp("mx.com.zorroabarrotero.zorro_expres_app");
-    
   });
-
 
 it('TC_A_001 alta cliente invitado', async () => {
   const tes = { ...testData };
@@ -140,6 +133,7 @@ it('TC_A_002 alta usuario cliente red', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
+  err.codigoAlta = '¡Bienvenido a Exprezo!, ya puedes iniciar sesión y empezar a disfrutar de nuestros servicios';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -179,7 +173,7 @@ it('TC_A_003 telefono registrado', async () => {
   const err = { ...errorData };
   tes.telefono = '5563175580';
   expec.telefono = '5563175580';
-  err.codigoAlta = 'La direccion de correo o número de teléfono ingresado ya existe';
+  err.codigoAlta = 'La direccion de correo o número de teléfono ingresado ya existe.';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -202,7 +196,7 @@ it('TC_A_003 telefono registrado', async () => {
     await termsCheckbox2.click();
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
-    await validarMensajedeError('//android.widget.Button[@content-desc="La direccion de correo o número de teléfono ingresado ya existe"]', err.codigoAlta, 'Ya existe');
+    await validarMensajedeError('//android.widget.Button[@content-desc="La direccion de correo o número de teléfono ingresado ya existe."]', err.codigoAlta, 'Ya existe');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3985,4 +3979,5 @@ it('TC_A_104 doble clic en enviar', async () => {
     throw error;
   }
   });
+  
 });
