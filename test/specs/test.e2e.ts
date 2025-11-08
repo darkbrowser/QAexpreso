@@ -1,6 +1,68 @@
 import { expect, browser, $ } from '@wdio/globals';
 import allure from '@wdio/allure-reporter';
 import { testData,errorData,expectedData } from '../../data/loginData';
+const sql = require('mssql');
+
+async function borracliente(telefono) {
+  // Connection configuration
+  const config = {
+    user: 'your_username',
+    password: 'your_password',
+    server: 'your_server', // e.g. 'localhost' or '192.168.1.100'
+    database: 'ECOMMGZA',
+    options: {
+      encrypt: true, // Use true if connecting to Azure SQL
+      trustServerCertificate: true // For local dev
+    }
+  };
+
+  try {
+    let pool = await sql.connect(config);
+    const transaction = new sql.Transaction(pool);
+    await transaction.begin();
+    const request = new sql.Request(transaction);
+    await request.query(`
+      DECLARE @telefono VARCHAR(10) = '${telefono}';
+      DECLARE @cli_id INT;
+
+      SELECT @cli_id = cli_id 
+      FROM ECOMMGZA.ECOMM.te_cliente 
+      WHERE cli_tel = @telefono;
+
+      DELETE FROM ECOMMGZA.ECOMM.te_2fa_phone_verification 
+      WHERE phone_number = @telefono;
+
+      DELETE FROM ECOMM.td_operaciones
+      WHERE oped_opem_id IN (
+          SELECT opem_id 
+          FROM ECOMM.tp_operaciones 
+          WHERE opem_cli_id = @cli_id
+      );
+
+      DELETE FROM ECOMM.tp_operaciones 
+      WHERE opem_cli_id = @cli_id;
+
+      DELETE FROM ECOMM.mail_token 
+      WHERE tok_cli_id = @cli_id;
+
+      DELETE FROM ECOMMGZA.ECOMM.te_cliente 
+      WHERE cli_id = @cli_id;
+    `);
+
+    // Commit transaction
+    await transaction.commit();
+    console.log(`Cliente con tel ${telefono} borrado exitoso.`);
+  } catch (err) {
+    console.error('Error con el query:', err);
+
+    // Rollback if error
+    if (transaction) {
+      await transaction.rollback();
+    }
+  } finally {
+    sql.close();
+  }
+}
 
 async function llegaralFinal() {
     await driver.action('pointer').move({ duration: 0, x: 357, y: 1406 }).down({ button: 0 }).move({ duration: 1000, x: 384, y: 231 }).up({ button: 0 }).perform();
@@ -96,7 +158,7 @@ it('TC_A_001 alta cliente invitado', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  err.codigoAlta = '¡Bienvenido a Exprezo!, ya puedes iniciar sesión y empezar a disfrutar de nuestros servicios';
+  err.codigoAlta='¡Bienvenido a Exprezo!, ya puedes iniciar sesión y empezar a disfrutar de nuestros servicios';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -119,7 +181,7 @@ it('TC_A_001 alta cliente invitado', async () => {
     await termsCheckbox2.click();
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
-    await fijarvariableconPasos('//android.widget.EditText', tes.codigoAlta, 'Codigo de Alta', expec.codigoAlta);
+    await darClicyFoto('//android.widget.Button[@content-desc="Solicitar código por SMS"]', 'Solicitar SMS');
     await darClicyFoto('//android.widget.Button[@content-desc="Verificar mi cuenta"]', 'Verificar');
     await validarMensajedeError('//android.view.View[@content-desc="¡Bienvenido a Exprezo!, ya puedes iniciar sesión y empezar a disfrutar de nuestros servicios"]',err.codigoAlta,'Bienvenido');
   } catch (error) {
@@ -127,13 +189,13 @@ it('TC_A_001 alta cliente invitado', async () => {
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
     throw error;
   }
-});
+  });
 
 it('TC_A_002 alta usuario cliente red', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  err.codigoAlta = '¡Bienvenido a Exprezo!, ya puedes iniciar sesión y empezar a disfrutar de nuestros servicios';
+  err.codigoAlta='¡Bienvenido a Exprezo!, ya puedes iniciar sesión y empezar a disfrutar de nuestros servicios';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -145,7 +207,7 @@ it('TC_A_002 alta usuario cliente red', async () => {
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[5]', tes.correo, 'correo', expec.correo);
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[6]', tes.codigopostal, 'Codigo Postal', expec.codigopostal);
     llegaralFinal();
-    await fijarvariableconPasos('-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(3)', tes.numCliente, 'Num Cliente', expec.numCliente);
+    await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(3)", tes.numCliente, 'Num Cliente', expec.numCliente);
     await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)", tes.contraseña1, 'Password', expec.contraseña1);
     await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)", tes.contraseña2, 'Password', expec.contraseña2);
     await selectSucursal();
@@ -157,15 +219,16 @@ it('TC_A_002 alta usuario cliente red', async () => {
     await termsCheckbox2.click();
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
-    await fijarvariableconPasos('//android.widget.EditText', tes.codigoAlta, 'Codigo de Alta', expec.codigoAlta);
-    await darClicyFoto('//android.widget.Button[@content-desc="Verificar mi cuenta"]', 'Verificar');
+    await fijarvariableconPasos('//android.widget.EditText', tes.codigoAlta, 'Codigo de Alta', expec.codigoAlta); //validar CODIGO
+    await darClicyFoto('//android.widget.Button[@content-desc="Solicitar código por SMS"]', 'Solicitar SMS');//clic para habilitar
+    await darClicyFoto('//android.widget.Button[@content-desc="Verificar mi cuenta"]', 'Verificar');//boton
     await validarMensajedeError('//android.view.View[@content-desc="¡Bienvenido a Exprezo!, ya puedes iniciar sesión y empezar a disfrutar de nuestros servicios"]',err.codigoAlta,'Bienvenido');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
     throw error;
   }
-});
+  });
 
 it('TC_A_003 telefono registrado', async () => {
   const tes = { ...testData };

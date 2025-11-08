@@ -8,7 +8,7 @@ export const testData = {
   contraseña1: 'Clave1234',
   contraseña2: 'Clave1234',
   sucursal: 'ZSJ',
-  numCliente: '000001024',
+  numCliente: '000105445',
   codigoAlta: '123456'
 };
 
@@ -22,7 +22,7 @@ export const expectedData = {
   contraseña1: 'Clave1234',
   contraseña2: 'Clave1234',
   sucursal: 'ZSJ',
-  numCliente: '000001024',
+  numCliente: '000105445',
   codigoAlta: '123456'
 };
 
