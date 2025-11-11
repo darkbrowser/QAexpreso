@@ -97,8 +97,8 @@ async function fijarvariableconPasos(clase, valor, nombre, esperado) {
       allure.addStep(`Validación exitosa: ${nombre} = "${valor}"`);
       allure.addLabel('input-field', valor);
       allure.addArgument('expected value', esperado);
-  const screenshot = await browser.takeScreenshot();
-  allure.addAttachment(`${nombre} ingresado`, Buffer.from(screenshot, 'base64'), 'image/png');
+  //const screenshot = await browser.takeScreenshot();
+  //allure.addAttachment(`${nombre} ingresado`, Buffer.from(screenshot, 'base64'), 'image/png');
   allure.endStep();
 }
 
@@ -2910,7 +2910,7 @@ it('TC_A_075', async () => {
   const err = { ...errorData };
   tes.nombre = '';
   expec.nombre = '';
-  err.nombre = '';
+  err.nombre = 'Verificar cuenta';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -3612,33 +3612,13 @@ it('TC_A_094 boton contactar soporte', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.nombre = '';
-  expec.nombre = '';
-  err.nombre = '';
+  tes.codigoAlta = '¡Hola! Me gustaria recibir ayuda.';
+  expec.codigoAlta = '¡Hola! Me gustaria recibir ayuda.';
+  err.codigoAlta = '¡Hola! Me gustaria recibir ayuda.';
   try {
-    await gotoExprezo();
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[2]', tes.apellidoPaterno, 'apellido paterno', expec.apellidoPaterno);
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[3]', tes.apellidoMaterno, 'apellido materno', expec.apellidoMaterno);
-    await darClicyFoto('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.view.View[1]', 'Selector de fecha');
-    await darClicyFoto('//android.widget.Button[@content-desc="Aceptar"]', 'Botón Aceptar fecha');
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[4]', tes.telefono, 'teléfono', expec.telefono);
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[5]', tes.correo, 'correo', expec.correo);
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[6]', tes.codigopostal, 'Codigo Postal', expec.codigopostal);
-    llegaralFinal();
-    await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)", tes.contraseña1, 'Password', expec.contraseña1);
-    await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)", tes.contraseña2, 'Password', expec.contraseña2);
-    await selectSucursal();
-    llegaralFinal();
-    const termsCheckbox1 = await driver.$('android=new UiSelector().descriptionContains("términos y condiciones")');
-    await termsCheckbox1.click();
-    const isChecked1 = await termsCheckbox1.getAttribute("checked");
-    const termsCheckbox2 = await driver.$('android=new UiSelector().descriptionContains("políticas de privacidad.")');
-    await termsCheckbox2.click();
-    const isChecked2 = await termsCheckbox2.getAttribute("checked");
-    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
-    await llegaralPrincipio();
-    await llegaralFinal();
+    await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
+    await darClicyFoto('//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.View/android.view.View/android.view.View/android.view.View/android.widget.ImageView', 'App Exprezzo'); //abre la app
+    await fijarvariableconPasos('//android.widget.EditText[@resource-id="com.whatsapp:id/entry"]',tes.codigoAlta,'Whatsapp',err.codigoAlta)
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3650,12 +3630,11 @@ it('TC_A_095 validar lista de sucursales', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.nombre = '';
-  expec.nombre = '';
-  err.nombre = '';
   try {
     await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
-    await darClicyFoto('//android.widget.Button[@content-desc="Regístrate Aquí"]', 'Botón Regístrate Aquí');
+    await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[1]', tes.correo, 'correo', expec.correo);
+    await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[2]', tes.contraseña1, 'contraseña', expec.contraseña1);
+    await darClicyFoto('//android.widget.Button[@content-desc="Entrar"]', 'Lista Sucursales');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3667,12 +3646,13 @@ it('TC_A_096 pantalla de registro 30 dias', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.nombre = '';
-  expec.nombre = '';
-  err.nombre = '';
+  tes.codigoAlta = '//android.view.View[@content-desc="Inicia tu prueba GRATIS de';
+  expec.codigoAlta = '//android.view.View[@content-desc="Inicia tu prueba GRATIS de';
+  err.codigoAlta = '';
   try {
     await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
     await darClicyFoto('//android.widget.Button[@content-desc="Regístrate Aquí"]', 'Botón Regístrate Aquí');
+    await fijarvariableconPasos('//android.view.View[@content-desc="Inicia tu prueba GRATIS de nuestra membresía por 30 DÍAS"]',tes.codigoAlta,'Membresia 30 dias',err.codigoAlta);
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3684,12 +3664,14 @@ it('TC_A_097 cuenta de correo inexistente', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.nombre = '';
-  expec.nombre = '';
-  err.nombre = '';
+  tes.correo = 'pepe@gmail.com';
+  expec.correo = 'pepe@gmail.com';
+  err.correo = 'Usuario no registrado';
   try {
     await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
-    await darClicyFoto('//android.widget.Button[@content-desc="Regístrate Aquí"]', 'Botón Regístrate Aquí');
+    await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[1]', tes.correo, 'correo', expec.correo);
+    await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[2]', tes.contraseña1, 'contraseña', expec.contraseña1);
+    await darClicyFoto('//android.widget.Button[@content-desc="Entrar"]', 'Usuario no registrado');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3701,12 +3683,14 @@ it('TC_A_098 contrasena incorrecta', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.nombre = '';
-  expec.nombre = '';
-  err.nombre = '';
+  tes.contraseña1 = '0987654321';
+  expec.contraseña1 = '0987654321';
+  err.contraseña1 = 'Usuario o contraseña incorrecta.';
   try {
     await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
-    await darClicyFoto('//android.widget.Button[@content-desc="Regístrate Aquí"]', 'Botón Regístrate Aquí');
+    await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[1]', tes.correo, 'correo', expec.correo);
+    await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[2]', tes.contraseña1, 'contraseña', expec.contraseña1);
+    await darClicyFoto('//android.widget.Button[@content-desc="Entrar"]', 'Usuario o contraseña incorrecta.');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3723,7 +3707,9 @@ it('TC_A_099 url recuperar contrasena', async () => {
   err.nombre = '';
   try {
     await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
-    await darClicyFoto('//android.widget.Button[@content-desc="Regístrate Aquí"]', 'Botón Regístrate Aquí');
+    await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[1]', tes.correo, 'correo', expec.correo);
+    await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[2]', tes.contraseña1, 'contraseña', expec.contraseña1);
+    await darClicyFoto('//android.widget.Button[@content-desc="Entrar"]', 'Usuario no registrado');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3740,7 +3726,9 @@ it('TC_A_100 recuperar clave vacia', async () => {
   err.nombre = '';
   try {
     await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
-    await darClicyFoto('//android.widget.Button[@content-desc="Regístrate Aquí"]', 'Botón Regístrate Aquí');
+    await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[1]', tes.correo, 'correo', expec.correo);
+    await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[2]', tes.contraseña1, 'contraseña', expec.contraseña1);
+    await darClicyFoto('//android.widget.Button[@content-desc="Entrar"]', 'Usuario no registrado');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3757,7 +3745,9 @@ it('TC_A_101 formato de correo invalido', async () => {
   err.nombre = '';
   try {
     await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
-    await darClicyFoto('//android.widget.Button[@content-desc="Regístrate Aquí"]', 'Botón Regístrate Aquí');
+    await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[1]', tes.correo, 'correo', expec.correo);
+    await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[2]', tes.contraseña1, 'contraseña', expec.contraseña1);
+    await darClicyFoto('//android.widget.Button[@content-desc="Entrar"]', 'Usuario no registrado');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3765,16 +3755,17 @@ it('TC_A_101 formato de correo invalido', async () => {
   }
 });
 
-it('TC_A_102', async () => {
+it('TC_A_102 recuperar cuenta existente', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.nombre = '';
-  expec.nombre = '';
-  err.nombre = '';
+  tes.nombre = 'saulsolisg@outlook.com';
+  expec.nombre = 'saulsolisg@outlook.com';
+  err.nombre = 'Se ha enviado un correo';
   try {
     await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
-    await darClicyFoto('//android.widget.Button[@content-desc="Regístrate Aquí"]', 'Botón Regístrate Aquí');
+    await darClicyFoto('//android.widget.Button[@content-desc="Recuperar contraseña"]', 'Botón Recuperar cuenta');
+    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3786,12 +3777,12 @@ it('TC_A_103 correo inexistente', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.nombre = '';
-  expec.nombre = '';
-  err.nombre = '';
+  tes.nombre = 'ing.saulsolisg@gmail.com';
+  expec.nombre = 'ing.saulsolisg@gmail.com';
+  err.nombre = 'Por favor verifica el corro ingresado';
   try {
     await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
-    await darClicyFoto('//android.widget.Button[@content-desc="Regístrate Aquí"]', 'Botón Regístrate Aquí');
+    await fijarvariableconPasos('//android.widget.Button[@content-desc="Entrar"]"]', tes.contraseña1,'', expec.correo);
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3803,12 +3794,13 @@ it('TC_A_104 doble clic en enviar', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.nombre = '';
-  expec.nombre = '';
-  err.nombre = '';
+  tes.correo = 'ing.saulsolisg@gmail.com';
+  expec.correo = 'ing.saulsolisg@gmail.com';
+  err.correo = 'Ya has envíado una solicitud para restaurar tu contraseña, por favor tus mensajes o correo electrónico ; o espera 30 minutos para volver a enviar la solicitud';
   try {
     await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
-    await darClicyFoto('//android.widget.Button[@content-desc="Regístrate Aquí"]', 'Botón Regístrate Aquí');
+    await darClicyFoto('//android.widget.Button[@content-desc="Entrar"]"]', 'Botón Enviar 1');
+    await fijarvariableconPasos('//android.widget.Button[@content-desc="Entrar"]', tes.correo,'Botón Enviar 2',expec.correo);  
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
