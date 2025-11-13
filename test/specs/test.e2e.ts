@@ -1243,7 +1243,7 @@ it('TC_A_030 apellido materno a 31 caracteres', async () => {
   const err = { ...errorData };
   tes.apellidoMaterno = 'aaaaaaaaaabbbbbbbbbbccccccccccd';
   expec.apellidoMaterno = 'aaaaaaaaaabbbbbbbbbbccccccccccd';
-  err.apellidoMaterno = '30/30';
+  err.apellidoMaterno = 'Quedan 0 caracteres';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
