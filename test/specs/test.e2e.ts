@@ -91,7 +91,6 @@ async function fijarvariableconPasos(clase, valor, nombre, esperado) {
       const el = await driver.$(clase);
       allure.startStep(`Ingresar ${nombre}: ${valor}`);    
       await el.click();
-      await driver.hideKeyboard();
       await el.setValue(valor);
       expect(valor).toBe(esperado);
       allure.addStep(`Validación exitosa: ${nombre} = "${valor}"`);
@@ -100,6 +99,11 @@ async function fijarvariableconPasos(clase, valor, nombre, esperado) {
   //const screenshot = await browser.takeScreenshot();
   //allure.addAttachment(`${nombre} ingresado`, Buffer.from(screenshot, 'base64'), 'image/png');
   allure.endStep();
+  if(nombre!='Codigo Postal')
+  {
+    await driver.back();
+  }else{ await driver.hideKeyboard()}
+  
 }
 
 async function insertarContrasena(clase, valor, nombre, esperado) {
@@ -152,8 +156,10 @@ describe('Exprezzo App', () => {
     await driver.executeScript('mobile:pressKey', [{ keycode: 3 }]);
     await driver.terminateApp("com.android.chrome");
     await driver.terminateApp("mx.com.zorroabarrotero.zorro_expres_app");
+    cerrar pestana
+    abirir pestana devex[reso]
   });
-  
+
 it('TC_A_001 alta cliente invitado', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
@@ -164,11 +170,12 @@ it('TC_A_001 alta cliente invitado', async () => {
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[2]', tes.apellidoPaterno, 'apellido paterno', expec.apellidoPaterno);
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[3]', tes.apellidoMaterno, 'apellido materno', expec.apellidoMaterno);
-    await darClicyFoto('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.view.View[1]', 'Selector de fecha');
-    await darClicyFoto('//android.widget.Button[@content-desc="Aceptar"]', 'Botón Aceptar fecha');
+    
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[4]', tes.telefono, 'teléfono', expec.telefono);
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[5]', tes.correo, 'correo', expec.correo);
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[6]', tes.codigopostal, 'Codigo Postal', expec.codigopostal);
+    await darClicyFoto('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.view.View[1]', 'Selector de fecha');
+    await darClicyFoto('//android.widget.Button[@content-desc="Aceptar"]', 'Botón Aceptar fecha');
     llegaralFinal();
     await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)", tes.contraseña1, 'Password', expec.contraseña1);
     await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)", tes.contraseña2, 'Password', expec.contraseña2);
@@ -181,8 +188,9 @@ it('TC_A_001 alta cliente invitado', async () => {
     await termsCheckbox2.click();
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
-    await darClicyFoto('//android.widget.Button[@content-desc="Solicitar código por SMS"]', 'Solicitar SMS');
-    await darClicyFoto('//android.widget.Button[@content-desc="Verificar mi cuenta"]', 'Verificar');
+    await fijarvariableconPasos('//android.widget.EditText', tes.codigoAlta, 'Codigo de Alta', expec.codigoAlta); //validar CODIGO
+    await darClicyFoto('//android.widget.Button[@content-desc="Solicitar código por SMS"]', 'Solicitar SMS');//clic para habilitar
+    await darClicyFoto('//android.widget.Button[@content-desc="Verificar mi cuenta"]', 'Verificar');//boton
     await validarMensajedeError('//android.view.View[@content-desc="¡Bienvenido a Exprezo!, ya puedes iniciar sesión y empezar a disfrutar de nuestros servicios"]',err.codigoAlta,'Bienvenido');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
@@ -190,7 +198,7 @@ it('TC_A_001 alta cliente invitado', async () => {
     throw error;
   }
   });
-
+  
 it('TC_A_002 alta usuario cliente red', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
@@ -201,11 +209,12 @@ it('TC_A_002 alta usuario cliente red', async () => {
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[2]', tes.apellidoPaterno, 'apellido paterno', expec.apellidoPaterno);
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[3]', tes.apellidoMaterno, 'apellido materno', expec.apellidoMaterno);
-    await darClicyFoto('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.view.View[1]', 'Selector de fecha');
-    await darClicyFoto('//android.widget.Button[@content-desc="Aceptar"]', 'Botón Aceptar fecha');
+    
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[4]', tes.telefono, 'teléfono', expec.telefono);
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[5]', tes.correo, 'correo', expec.correo);
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[6]', tes.codigopostal, 'Codigo Postal', expec.codigopostal);
+    await darClicyFoto('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.view.View[1]', 'Selector de fecha');
+    await darClicyFoto('//android.widget.Button[@content-desc="Aceptar"]', 'Botón Aceptar fecha');
     llegaralFinal();
     await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(3)", tes.numCliente, 'Num Cliente', expec.numCliente);
     await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)", tes.contraseña1, 'Password', expec.contraseña1);
@@ -2946,7 +2955,7 @@ it('TC_A_076 alta cliente invitado', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  err.codigoAlta='¡Bienvenido a Exprezo!, ya puedes iniciar sesión y empezar a disfrutar de nuestros servicios';
+  err.codigoAlta='Verificar cuenta';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -2971,7 +2980,7 @@ it('TC_A_076 alta cliente invitado', async () => {
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await darClicyFoto('//android.widget.Button[@content-desc="Solicitar código por SMS"]', 'Solicitar SMS');
     await darClicyFoto('//android.widget.Button[@content-desc="Verificar mi cuenta"]', 'Verificar');
-    await validarMensajedeError('//android.view.View[@content-desc="¡Bienvenido a Exprezo!, ya puedes iniciar sesión y empezar a disfrutar de nuestros servicios"]',err.codigoAlta,'Bienvenido');
+    await validarMensajedeError('//android.view.View[@content-desc="Verificar cuenta"]',err.codigoAlta,'Verificar cuenta');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2983,7 +2992,7 @@ it('TC_A_076 alta cliente invitado', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  err.codigoAlta='¡Bienvenido a Exprezo!, ya puedes iniciar sesión y empezar a disfrutar de nuestros servicios';
+  err.codigoAlta='Hemos enviado un código de verificación  a tu whats app';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -3020,7 +3029,7 @@ it('TC_A_076 alta cliente invitado', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  err.codigoAlta='¡Bienvenido a Exprezo!, ya puedes iniciar sesión y empezar a disfrutar de nuestros servicios';
+  err.codigoAlta='Hemos enviadoun código de verificación  a tu whats app';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -3045,7 +3054,7 @@ it('TC_A_076 alta cliente invitado', async () => {
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await darClicyFoto('//android.widget.Button[@content-desc="Solicitar código por SMS"]', 'Solicitar SMS');
     await darClicyFoto('//android.widget.Button[@content-desc="Verificar mi cuenta"]', 'Verificar');
-    await validarMensajedeError('//android.view.View[@content-desc="¡Bienvenido a Exprezo!, ya puedes iniciar sesión y empezar a disfrutar de nuestros servicios"]',err.codigoAlta,'Bienvenido');
+    await validarMensajedeError('//android.view.View[@content-desc="Hemos enviadoun código de verificación  a tu whats app"]',err.codigoAlta,'Bienvenido');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3617,7 +3626,7 @@ it('TC_A_094 boton contactar soporte', async () => {
   err.codigoAlta = '¡Hola! Me gustaria recibir ayuda.';
   try {
     await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
-    await darClicyFoto('//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.View/android.view.View/android.view.View/android.view.View/android.widget.ImageView', 'App Exprezzo'); //abre la app
+    await darClicyFoto('//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.View// /android.view.View/android.view.View/android.view.View/android.widget.ImageView', 'App Exprezzo'); //abre la app
     await fijarvariableconPasos('//android.widget.EditText[@resource-id="com.whatsapp:id/entry"]',tes.codigoAlta,'Whatsapp',err.codigoAlta)
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
@@ -3777,9 +3786,9 @@ it('TC_A_103 correo inexistente', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.nombre = 'ing.saulsolisg@gmail.com';
-  expec.nombre = 'ing.saulsolisg@gmail.com';
-  err.nombre = 'Por favor verifica el corro ingresado';
+  tes.contraseña1 = 'ing.saulsolisg@gmail.com';
+  expec.contraseña1 = 'ing.saulsolisg@gmail.com';
+  err.contraseña1 = 'Por favor verifica el corro ingresado';
   try {
     await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
     await fijarvariableconPasos('//android.widget.Button[@content-desc="Entrar"]"]', tes.contraseña1,'', expec.correo);

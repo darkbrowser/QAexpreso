@@ -91,17 +91,19 @@ async function fijarvariableconPasos(clase, valor, nombre, esperado) {
       const el = await driver.$(clase);
       allure.startStep(`Ingresar ${nombre}: ${valor}`);    
       await el.click();
-      // await driver.pause(500);
-      await driver.hideKeyboard();
       await el.setValue(valor);
       expect(valor).toBe(esperado);
       allure.addStep(`Validación exitosa: ${nombre} = "${valor}"`);
       allure.addLabel('input-field', valor);
       allure.addArgument('expected value', esperado);
-      allure.endStep();
-  const screenshot = await browser.takeScreenshot();
-  allure.addAttachment(`${nombre} ingresado`, Buffer.from(screenshot, 'base64'), 'image/png');
+  //const screenshot = await browser.takeScreenshot();
+  //allure.addAttachment(`${nombre} ingresado`, Buffer.from(screenshot, 'base64'), 'image/png');
   allure.endStep();
+  if(nombre!='Codigo Postal')
+  {
+    await driver.back();
+  }else{ await driver.hideKeyboard()}
+  
 }
 
 async function insertarContrasena(clase, valor, nombre, esperado) {
@@ -144,7 +146,7 @@ async function gotoExprezo() {
 
 
 
-describe('Exprezzo App', () => {
+describe('Pruebas de Login', () => {
   before(async () => {
     allure.addEnvironment('Plataforma', 'Android');
     allure.addEnvironment('Sistema operativo', 'macOS');
@@ -160,23 +162,23 @@ describe('Exprezzo App', () => {
   });
 
    
-it('TC_A_002 alta usuario cliente red', async () => {
+  it('TC_A_002 alta usuario cliente red', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.codigoAlta='123456';
-  expec.codigoAlta='123456';//err.codigoAlta = '¡Bienvenido a Exprezo!, ya puedes iniciar sesión y empezar a disfrutar de nuestros servicios';
   err.codigoAlta='¡Bienvenido a Exprezo!, ya puedes iniciar sesión y empezar a disfrutar de nuestros servicios';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[2]', tes.apellidoPaterno, 'apellido paterno', expec.apellidoPaterno);
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[3]', tes.apellidoMaterno, 'apellido materno', expec.apellidoMaterno);
-    await darClicyFoto('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.view.View[1]', 'Selector de fecha');
-    await darClicyFoto('//android.widget.Button[@content-desc="Aceptar"]', 'Botón Aceptar fecha');
+    
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[4]', tes.telefono, 'teléfono', expec.telefono);
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[5]', tes.correo, 'correo', expec.correo);
+    await darClicyFoto('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.view.View[1]', 'Selector de fecha');
+    await darClicyFoto('//android.widget.Button[@content-desc="Aceptar"]', 'Botón Aceptar fecha');
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[6]', tes.codigopostal, 'Codigo Postal', expec.codigopostal);
+    
     llegaralFinal();
     await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(3)", tes.numCliente, 'Num Cliente', expec.numCliente);
     await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)", tes.contraseña1, 'Password', expec.contraseña1);
