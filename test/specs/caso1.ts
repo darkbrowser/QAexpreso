@@ -183,7 +183,7 @@ it('TC_A_037 telefono a 11 digitos', async () => {
   const err = { ...errorData };
   tes.telefono = '12345678901';
   expec.telefono = '12345678901';
-  err.telefono = '10/10';
+  err.telefono = 'Quedan 0 caracteres';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -207,7 +207,7 @@ it('TC_A_037 telefono a 11 digitos', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="10/10"]',err.telefono,'Longitud de Caracter');
+    await validarMensajedeError('(//android.view.View[@content-desc="Quedan 0 caracteres"])[1]',err.telefono,'Longitud de Caracter');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');

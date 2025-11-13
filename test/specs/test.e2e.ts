@@ -390,14 +390,16 @@ it('TC_A_007 volver al home', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.nombre = '';
-  expec.nombre = '';
-  err.nombre = '';
   try {
     await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
     await darClicyFoto('//android.widget.Button[@content-desc="Regístrate Aquí"]', 'Botón Regístrate Aquí');
-    await driver.executeScript('mobile:pressKey', [{ keycode: 4 }]);
-    await driver.executeScript('mobile:pressKey', [{ keycode: 4 }]);
+    await driver.back();
+    await driver.back();
+    allure.addStep(`Validación exitosa:"`);
+  const screenshot = await browser.takeScreenshot();
+  allure.addAttachment(`Home`, Buffer.from(screenshot, 'base64'), 'image/png');
+  allure.endStep();
+    await darClicyFoto('//android.widget.TextView[@content-desc="Entrar"]', 'Home'); //abre la app
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -589,7 +591,7 @@ it('TC_A_013 nombre con 30 caracteres', async () => {
   const err = { ...errorData };
   tes.nombre = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
   expec.nombre = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
-  err.nombre = '30/30';
+  err.nombre = 'Quedan 0 caracteres';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -627,7 +629,7 @@ it('TC_A_014 nombre con 29 caracteres', async () => {
   const err = { ...errorData };
   tes.nombre = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
   expec.nombre = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
-  err.nombre = '29/30';
+  err.nombre = 'Quedan 1 caracteres';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -651,7 +653,7 @@ it('TC_A_014 nombre con 29 caracteres', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('(//android.view.View[@content-desc="Quedan 1 caracteres"])[1]',err.nombre,'Longitud de Caracter');
+    await validarMensajedeError('//android.view.View[@content-desc="Quedan 1 caracteres"]',err.nombre,'Longitud de Caracter');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -665,7 +667,7 @@ it('TC_A_015 nombre con 31 caracteres', async () => {
   const err = { ...errorData };
   tes.nombre = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
   expec.nombre = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
-  err.nombre = '30/30';
+  err.nombre = 'Quedan 0 caracteres';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -689,7 +691,7 @@ it('TC_A_015 nombre con 31 caracteres', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('(//android.view.View[@content-desc="Quedan 0 caracteres"])[1]',err.nombre,'Longitud de Caracter');
+    await validarMensajedeError('//android.view.View[@content-desc="Quedan 1 caracteres"]',err.nombre,'Longitud de Caracter');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -897,7 +899,7 @@ it('TC_A_021 apellido paterno a 30 caracteres', async () => {
   const err = { ...errorData };
   tes.apellidoPaterno = 'aaaaaaaaaabbbbbbbbbbcccccccccc';
   expec.apellidoPaterno = 'aaaaaaaaaabbbbbbbbbbcccccccccc';
-  err.apellidoPaterno = '30/30';
+  err.apellidoPaterno = 'Quedan 0 caracteres';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -921,7 +923,7 @@ it('TC_A_021 apellido paterno a 30 caracteres', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('(//android.view.View[@content-desc="Quedan 0 caracteres"])[2]',err.apellidoPaterno,'Longitud de Caracter');
+    await validarMensajedeError('//android.view.View[@content-desc="Quedan 0 caracteres"]',err.apellidoPaterno,'Longitud de Caracter');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -935,7 +937,7 @@ it('TC_A_022 apellido paterno a 29 caracteres', async () => {
   const err = { ...errorData };
   tes.apellidoPaterno = 'aaaaaaaaaabbbbbbbbbbccccccccc';
   expec.apellidoPaterno = 'aaaaaaaaaabbbbbbbbbbccccccccc';
-  err.apellidoPaterno = '29/30';
+  err.apellidoPaterno = 'Quedan 1 caracteres';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -959,7 +961,7 @@ it('TC_A_022 apellido paterno a 29 caracteres', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('(//android.view.View[@content-desc="Quedan 1 caracteres"])[2]',err.apellidoPaterno,'Longitud de Caracter');
+    await validarMensajedeError('//android.view.View[@content-desc="Quedan 1 caracteres"]',err.apellidoPaterno,'Longitud de Caracter');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -973,7 +975,7 @@ it('TC_A_023 apellido paterno a 31 caracteres', async () => {
   const err = { ...errorData };
   tes.apellidoPaterno = 'aaaaaaaaaabbbbbbbbbbccccccccccd';
   expec.apellidoPaterno = 'aaaaaaaaaabbbbbbbbbbccccccccccd';
-  err.apellidoPaterno = '30/30';
+  err.apellidoPaterno = 'Quedan 0 caracteres';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -997,7 +999,7 @@ it('TC_A_023 apellido paterno a 31 caracteres', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('(//android.view.View[@content-desc="Quedan 0 caracteres"])[2]',err.apellidoPaterno,'Longitud de Caracter');
+    await validarMensajedeError('(//android.view.View[@content-desc="Quedan 0 caracteres"]',err.apellidoPaterno,'Longitud de Caracter');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -1073,7 +1075,7 @@ it('TC_A_025 apellido materno numerico', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="Solo se permiten letras"])[2]',err.apellidoMaterno,'Solo se permiten letras');
+    await validarMensajedeError('//android.view.View[@content-desc="Solo se permiten letras"]',err.apellidoMaterno,'Solo se permiten letras');
     await llegaralFinal();
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
@@ -1111,7 +1113,7 @@ it('TC_A_026 apellido materno vacio', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="Ingrese su Apellido"])[2]',err.apellidoMaterno,'Apellido Materno');
+    await validarMensajedeError('//android.view.View[@content-desc="Ingrese su Apellido"]',err.apellidoMaterno,'Apellido Materno');
     await llegaralFinal();
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
@@ -1150,7 +1152,7 @@ it('TC_A_027 apellido materno caracteres especiales', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="ISolo se permiten letras"])[2]',err.apellidoMaterno,'Solo se permiten letras');
+    await validarMensajedeError('(//android.view.View[@content-desc="ISolo se permiten letras"])[2]',err.apellidoMaterno,'Solo se permiten letras');
     await llegaralFinal();
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
@@ -1165,7 +1167,7 @@ it('TC_A_028 apellido materno a 30 caracteres', async () => {
   const err = { ...errorData };
   tes.apellidoMaterno = 'aaaaaaaaaabbbbbbbbbbcccccccccc';
   expec.apellidoMaterno = 'aaaaaaaaaabbbbbbbbbbcccccccccc';
-  err.apellidoMaterno = '30/30';
+  err.apellidoMaterno = 'Quedan 0 caracteres';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -1189,7 +1191,7 @@ it('TC_A_028 apellido materno a 30 caracteres', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('(//android.view.View[@content-desc="Quedan 0 caracteres"])[3]',err.apellidoMaterno,'Longitud de Caracter');
+    await validarMensajedeError('//android.view.View[@content-desc="Quedan 0 caracteres"]',err.apellidoMaterno,'Longitud de Caracter');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -1203,7 +1205,7 @@ it('TC_A_029 apellido materno a 29 caracteres', async () => {
   const err = { ...errorData };
   tes.apellidoMaterno = 'aaaaaaaaaabbbbbbbbbbccccccccc';
   expec.apellidoMaterno = 'aaaaaaaaaabbbbbbbbbbccccccccc';
-  err.apellidoMaterno = '29/30';
+  err.apellidoMaterno = 'Quedan 1 caracteres';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -1227,7 +1229,7 @@ it('TC_A_029 apellido materno a 29 caracteres', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('(//android.view.View[@content-desc="Quedan 1 caracteres"])[3]',err.apellidoMaterno,'Longitud de Caracter');
+    await validarMensajedeError('//android.view.View[@content-desc="Quedan 1 caracteres"]',err.apellidoMaterno,'Longitud de Caracter');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -1265,7 +1267,7 @@ it('TC_A_030 apellido materno a 31 caracteres', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('(//android.view.View[@content-desc="Quedan 0 caracteres"])[3]',err.apellidoMaterno,'Longitud de Caracter');
+    await validarMensajedeError('//android.view.View[@content-desc="Quedan 0 caracteres"]',err.apellidoMaterno,'Longitud de Caracter');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -1390,9 +1392,9 @@ it('TC_A_034 telefono a 9 digitos', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.telefono = '12345678901';
-  expec.telefono = '12345678901';
-  err.telefono = '10/10';
+  tes.telefono = '123456789';
+  expec.telefono = '123456789';
+  err.telefono = 'Quedan 1 caracteres';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -1416,7 +1418,7 @@ it('TC_A_034 telefono a 9 digitos', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="Quedan 0 caracteres"]',err.telefono,'Telefono');
+    await validarMensajedeError('//android.view.View[@content-desc="Quedan 1 caracteres"]',err.telefono,'Telefono');
     await llegaralFinal();
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
@@ -1431,7 +1433,7 @@ it('TC_A_035 telefono a 10 digitos', async () => {
   const err = { ...errorData };
   tes.telefono = '1234567890';
   expec.telefono = '1234567890';
-  err.telefono = '10/10';
+  err.telefono = 'Quedan 0 caracteres';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -1469,7 +1471,7 @@ it('TC_A_036 telefono a 9 digitos', async () => {
   const err = { ...errorData };
   tes.telefono = '123456789';
   expec.telefono = '123456789';
-  err.telefono = '9/10';
+  err.telefono = 'Quedan 1 caracteres';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -1507,7 +1509,7 @@ it('TC_A_037 telefono a 11 digitos', async () => {
   const err = { ...errorData };
   tes.telefono = '12345678901';
   expec.telefono = '12345678901';
-  err.telefono = '10/10';
+  err.telefono = 'Quedan 0 caracteres';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -1700,7 +1702,7 @@ it('TC_A_042 correo de 63 caracteres', async () => {
   const err = { ...errorData };
   tes.correo = 'aaaaaaaaaaabbbbbbbbbbbaaaaaaaaaaacccccccccccccccccc@outlook.com';
   expec.correo = 'aaaaaaaaaaabbbbbbbbbbbaaaaaaaaaaacccccccccccccccccc@outlook.com';
-  err.correo = '63/64';
+  err.correo = 'Quedan 1 caracteres';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -1739,7 +1741,7 @@ it('TC_A_043 correo de 64 caracteres', async () => {
   const err = { ...errorData };
   tes.nombre = 'aaaaaaaaaaabbbbbbbbbbbaaaaaaaaaaaccccccccccccccccccc@outlook.com';
   expec.nombre = 'aaaaaaaaaaabbbbbbbbbbbaaaaaaaaaaaccccccccccccccccccc@outlook.com';
-  err.nombre = '64/64';
+  err.nombre = 'Quedan 0 caracteres';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -1778,7 +1780,7 @@ it('TC_A_044 correo de 65 caracteres', async () => {
   const err = { ...errorData };
   tes.correo = 'aaaaaaaaaaabbbbbbbbbbbaaaaaaaaaaaccccccccccccccccccc@outlook.comd';
   expec.correo = 'aaaaaaaaaaabbbbbbbbbbbaaaaaaaaaaaccccccccccccccccccc@outlook.comd';
-  err.correo = '64/64';
+  err.correo = 'Quedan 0 caracteres';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -2126,7 +2128,7 @@ it('TC_A_053 Numero de cliente ingresar texto', async () => {
   const err = { ...errorData };
   tes.numCliente = 'asdfghjkl';
   expec.numCliente = 'asdfghjkl';
-  err.numCliente = '0/9';
+  err.numCliente = 'Quedan 9 caracteres';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -2164,7 +2166,7 @@ it('TC_A_054 Num Cliente a 9 digitos', async () => {
   const err = { ...errorData };
   tes.numCliente = '123456789';
   expec.numCliente = '123456789';
-  err.numCliente = '9/9';
+  err.numCliente = 'Quedan 0 caracteres';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -2202,7 +2204,7 @@ it('TC_A_055 Num Cliente a 8 digitos', async () => {
   const err = { ...errorData };
   tes.numCliente = '12345678';
   expec.numCliente = '12345678';
-  err.numCliente = '8/9';
+  err.numCliente = 'Quedan 1 caracteres';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -2240,7 +2242,7 @@ it('TC_A_056 Num Cliente a 10 digitos', async () => {
   const err = { ...errorData };
   tes.numCliente = '123456789';
   expec.numCliente = '123456789';
-  err.numCliente = '9/9';
+  err.numCliente = 'Quedan 0 caracteres';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
