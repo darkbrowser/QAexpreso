@@ -2,13 +2,13 @@ import { expect, browser, $ } from '@wdio/globals';
 import allure from '@wdio/allure-reporter';
 import { testData,errorData,expectedData } from '../../data/loginData';
 const sql = require('mssql');
-
+//android.view.View[@content-desc="Valida que los campos requeridos cumplan con la información solicitada"]
 async function borracliente(telefono) {
   // Connection configuration
   const config = {
-    user: 'your_username',
-    password: 'your_password',
-    server: 'your_server', // e.g. 'localhost' or '192.168.1.100'
+    user: 'Zrecom02',
+    password: '!202408.!e',
+    server: '192.168.220.220', // e.g. 'localhost' or '192.168.1.100'
     database: 'ECOMMGZA',
     options: {
       encrypt: true, // Use true if connecting to Azure SQL
@@ -77,6 +77,22 @@ async function selectSucursal(){
     await driver.action('pointer').move({ duration: 0, x: 233, y: 802 }).down({ button: 0 }).move({ duration: 1000, x: 233, y: 802 }).up({ button: 0 }).perform();
 }
 
+async function linkterminos() {
+  await driver.action('pointer').move({ duration: 0, x: 279, y: 1264 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
+  allure.addStep(`Validación exitosa:"`);
+  const screenshot = await browser.takeScreenshot();
+  allure.addAttachment(`link click`, Buffer.from(screenshot, 'base64'), 'image/png');
+  allure.endStep();
+}
+
+async function linkpoliticas() {
+await driver.action('pointer').move({ duration: 0, x: 293, y: 1357 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
+allure.addStep(`Validación exitosa:"`);
+  const screenshot = await browser.takeScreenshot();
+  allure.addAttachment(`link click`, Buffer.from(screenshot, 'base64'), 'image/png');
+  allure.endStep();
+}
+
 async function validarMensajedeError(clase, esperado, sello) {
   const el = await driver.$(clase);
   const actual = await el.getAttribute('contentDescription');
@@ -117,7 +133,6 @@ async function insertarContrasena(clase, valor, nombre, esperado) {
       allure.addStep(`Validación exitosa: ${nombre} = "${valor}"`);
       allure.addLabel('input-field', valor);
       allure.addArgument('expected value', esperado);
-      allure.endStep();
   const screenshot = await browser.takeScreenshot();
   allure.addAttachment(`${nombre} ingresado`, Buffer.from(screenshot, 'base64'), 'image/png');
   allure.endStep();
@@ -140,13 +155,14 @@ async function darClicyFoto(selector, label, expectedSelector = null, expectedLa
 
 async function gotoExprezo() {
     await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
+    //await driver.pause(16000); // 16 seconds
+    //await darClicyFoto('//android.widget.Button[@content-desc="Ignorar"]', 'sin update');
     await darClicyFoto('//android.widget.Button[@content-desc="Regístrate Aquí"]', 'Botón Regístrate Aquí');
     await darClicyFoto('//android.widget.Button[@content-desc="Iniciar periodo de prueba"]', 'Botón Iniciar periodo de prueba');
 }
 
 
-
-describe('Pruebas de Login', () => {
+describe('Exprezzo App', () => {
   before(async () => {
     allure.addEnvironment('Plataforma', 'Android');
     allure.addEnvironment('Sistema operativo', 'macOS');
@@ -155,32 +171,30 @@ describe('Pruebas de Login', () => {
   });
 
   beforeEach(async () => {
-    //minimiza y cierra apps antes de abrir la de exprezo
+    await borracliente('4427152965');
     await driver.executeScript('mobile:pressKey', [{ keycode: 3 }]);
     await driver.terminateApp("com.android.chrome");
     await driver.terminateApp("mx.com.zorroabarrotero.zorro_expres_app");
   });
 
-   
-  it('TC_A_002 alta usuario cliente red', async () => {
+it('TC_A_037 telefono a 11 digitos', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  err.codigoAlta='¡Bienvenido a Exprezo!, ya puedes iniciar sesión y empezar a disfrutar de nuestros servicios';
+  tes.telefono = '12345678901';
+  expec.telefono = '12345678901';
+  err.telefono = '10/10';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[2]', tes.apellidoPaterno, 'apellido paterno', expec.apellidoPaterno);
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[3]', tes.apellidoMaterno, 'apellido materno', expec.apellidoMaterno);
-    
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[4]', tes.telefono, 'teléfono', expec.telefono);
-    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[5]', tes.correo, 'correo', expec.correo);
     await darClicyFoto('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.view.View[1]', 'Selector de fecha');
     await darClicyFoto('//android.widget.Button[@content-desc="Aceptar"]', 'Botón Aceptar fecha');
+    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[4]', tes.telefono, 'teléfono', expec.telefono);
+    await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[5]', tes.correo, 'correo', expec.correo);
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[6]', tes.codigopostal, 'Codigo Postal', expec.codigopostal);
-    
     llegaralFinal();
-    await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(3)", tes.numCliente, 'Num Cliente', expec.numCliente);
     await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(4)", tes.contraseña1, 'Password', expec.contraseña1);
     await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)", tes.contraseña2, 'Password', expec.contraseña2);
     await selectSucursal();
@@ -192,15 +206,12 @@ describe('Pruebas de Login', () => {
     await termsCheckbox2.click();
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
-    await fijarvariableconPasos('//android.widget.EditText', tes.codigoAlta, 'Codigo de Alta', expec.codigoAlta); //validar CODIGO
-    await darClicyFoto('//android.widget.Button[@content-desc="Solicitar código por SMS"]', 'Solicitar SMS');//clic para habilitar
-    await darClicyFoto('//android.widget.Button[@content-desc="Verificar mi cuenta"]', 'Verificar');//boton
-    await validarMensajedeError('//android.view.View[@content-desc="¡Bienvenido a Exprezo!, ya puedes iniciar sesión y empezar a disfrutar de nuestros servicios"]',err.codigoAlta,'Bienvenido');
+    llegaralPrincipio();
+    await validarMensajedeError('//android.view.View[@content-desc="10/10"]',err.telefono,'Longitud de Caracter');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
     throw error;
   }
-  });
 });
-
+  });
