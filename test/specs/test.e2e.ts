@@ -3772,17 +3772,16 @@ it('TC_A_099 url recuperar contrasena', async () => {
   }
 });
 
-it('TC_A_100 recuperar clave vacia', async () => {
+it('TC_A_100 recuperar correo vacio', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
-  tes.contraseña1 = '';
-  expec.contraseña1 = '';
+  tes.correo = '';
+  expec.correo = '';
   try {
     await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
     await darClicyFoto('//android.widget.Button[@content-desc="Recuperar contraseña"] boton recuperar', 'Recuperar');
-    await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[1]', tes.correo, 'correo', expec.correo);
-    await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[2]', tes.contraseña1, 'contraseña', expec.contraseña1);
+    await fijarvariableconPasos('//android.widget.EditText', tes.correo, 'correo', expec.correo);
     await darClicyFoto('//android.widget.Button[@content-desc="Entrar"]', 'contraseña vacia');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
@@ -3799,9 +3798,9 @@ it('TC_A_101 formato de correo invalido', async () => {
   expec.correo = 'pepegmail.com';
   try {
     await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
-    await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[1]', tes.correo, 'correo', expec.correo);
-    await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[2]', tes.contraseña1, 'contraseña', expec.contraseña1);
-    await darClicyFoto('//android.widget.Button[@content-desc="Entrar"]', 'Formato correo invalido');
+    await darClicyFoto('//android.widget.Button[@content-desc="Recuperar contraseña"] boton recuperar', 'Recuperar');
+    await fijarvariableconPasos('//android.widget.EditText', tes.correo, 'correo', expec.correo);
+    await darClicyFoto('//android.widget.Button[@content-desc="Entrar"]', 'Formato de correo invalido');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -3818,7 +3817,8 @@ it('TC_A_102 recuperar cuenta existente', async () => {
   err.nombre = 'Se ha enviado un correo';
   try {
     await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
-    await darClicyFoto('//android.widget.Button[@content-desc="Recuperar contraseña"]', 'Botón Recuperar cuenta');
+    await darClicyFoto('//android.widget.Button[@content-desc="Recuperar contraseña"] boton recuperar', 'Recuperar');
+    await fijarvariableconPasos('//android.widget.EditText', tes.correo, 'correo', expec.correo);
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
@@ -3836,8 +3836,8 @@ it('TC_A_103 correo inexistente', async () => {
   err.contraseña1 = 'Usuario no registrado';
   try {
     await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
-    await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[1]', tes.correo,'Correo', expec.correo);
-    await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[2] ', tes.contraseña1,'', expec.contraseña1);
+    await darClicyFoto('//android.widget.Button[@content-desc="Recuperar contraseña"] boton recuperar', 'Recuperar');
+    await fijarvariableconPasos('//android.widget.EditText', tes.correo, 'correo', expec.correo);
     await darClicyFoto('//android.widget.Button[@content-desc="Entrar"]"]', 'Botón Enviar 1');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
