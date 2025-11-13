@@ -2,16 +2,14 @@ import { expect, browser, $ } from '@wdio/globals';
 import allure from '@wdio/allure-reporter';
 import { testData,errorData,expectedData } from '../../data/loginData';
 const sql = require('mssql');
-//android.view.View[@content-desc="Valida que los campos requeridos cumplan con la información solicitada"]
 async function borracliente(telefono) {
-  // Connection configuration
   const config = {
-    user: 'Zrecom02',
-    password: '!202408.!e',
-    server: '192.168.220.220', // e.g. 'localhost' or '192.168.1.100'
-    database: 'ECOMMGZA',
+    user: '',
+    password: '',
+    server: '',
+    database: '',
     options: {
-      encrypt: true, // Use true if connecting to Azure SQL
+      encrypt: true,
       trustServerCertificate: true // For local dev
     }
   };
