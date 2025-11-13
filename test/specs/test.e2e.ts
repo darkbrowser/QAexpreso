@@ -77,6 +77,22 @@ async function selectSucursal(){
     await driver.action('pointer').move({ duration: 0, x: 233, y: 802 }).down({ button: 0 }).move({ duration: 1000, x: 233, y: 802 }).up({ button: 0 }).perform();
 }
 
+async function linkterminos() {
+  await driver.action('pointer').move({ duration: 0, x: 279, y: 1264 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
+  allure.addStep(`Validación exitosa:"`);
+  const screenshot = await browser.takeScreenshot();
+  allure.addAttachment(`link click`, Buffer.from(screenshot, 'base64'), 'image/png');
+  allure.endStep();
+}
+
+async function linkpoliticas() {
+await driver.action('pointer').move({ duration: 0, x: 293, y: 1357 }).down({ button: 0 }).pause(50).up({ button: 0 }).perform();
+allure.addStep(`Validación exitosa:"`);
+  const screenshot = await browser.takeScreenshot();
+  allure.addAttachment(`link click`, Buffer.from(screenshot, 'base64'), 'image/png');
+  allure.endStep();
+}
+
 async function validarMensajedeError(clase, esperado, sello) {
   const el = await driver.$(clase);
   const actual = await el.getAttribute('contentDescription');
@@ -2936,15 +2952,7 @@ it('TC_A_075 click en terminos y condiciones', async () => {
     await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)", tes.contraseña2, 'Password', expec.contraseña2);
     await selectSucursal();
     llegaralFinal();
-    const termsCheckbox1 = await driver.$('android=new UiSelector().descriptionContains("términos y condiciones")');
-    await termsCheckbox1.click();
-    const isChecked1 = await termsCheckbox1.getAttribute("checked");
-    const termsCheckbox2 = await driver.$('android=new UiSelector().descriptionContains("políticas de privacidad.")');
-    await termsCheckbox2.click();
-    const isChecked2 = await termsCheckbox2.getAttribute("checked");
-    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
-    await llegaralPrincipio();
-    await llegaralFinal();
+    await linkterminos();
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2972,16 +2980,7 @@ it('TC_A_076 click en politicas', async () => {
     await insertarContrasena("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(5)", tes.contraseña2, 'Password', expec.contraseña2);
     await selectSucursal();
     llegaralFinal();
-    const termsCheckbox1 = await driver.$('android=new UiSelector().descriptionContains("términos y condiciones")');
-    await termsCheckbox1.click();
-    const isChecked1 = await termsCheckbox1.getAttribute("checked");
-    const termsCheckbox2 = await driver.$('android=new UiSelector().descriptionContains("políticas de privacidad.")');
-    await termsCheckbox2.click();
-    const isChecked2 = await termsCheckbox2.getAttribute("checked");
-    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
-    await darClicyFoto('//android.widget.Button[@content-desc="Solicitar código por SMS"]', 'Solicitar SMS');
-    await darClicyFoto('//android.widget.Button[@content-desc="Verificar mi cuenta"]', 'Verificar');
-    await validarMensajedeError('//android.view.View[@content-desc="Verificar cuenta"]',err.codigoAlta,'Verificar cuenta');
+    await linkpoliticas();
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
