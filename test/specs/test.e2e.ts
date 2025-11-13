@@ -2,7 +2,7 @@ import { expect, browser, $ } from '@wdio/globals';
 import allure from '@wdio/allure-reporter';
 import { testData,errorData,expectedData } from '../../data/loginData';
 const sql = require('mssql');
-
+//android.view.View[@content-desc="Valida que los campos requeridos cumplan con la información solicitada"]
 async function borracliente(telefono) {
   // Connection configuration
   const config = {
@@ -805,7 +805,7 @@ it('TC_A_018 apellido paterno campos requeridos', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="Valida que los campos requeridos cumplan con la información solicitada"])[1]',err.apellidoPaterno,'Apellido Paterno');
+    await validarMensajedeError('//android.view.View[@content-desc="Valida que los campos requeridos cumplan con la información solicitada"]',err.apellidoPaterno,'Apellido Paterno');
     await llegaralFinal();
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
@@ -1035,7 +1035,7 @@ it('TC_A_024 apellido materno campos requeridos', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="Valida que los campos requeridos cumplan con la información solicitada"])[2]',err.apellidoMaterno,'Campos requeridos');
+    await validarMensajedeError('//android.view.View[@content-desc="Valida que los campos requeridos cumplan con la información solicitada"]',err.apellidoMaterno,'Campos requeridos');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2798,7 +2798,7 @@ it('TC_A_071 No coinciden contraseñas', async () => {
   const err = { ...errorData };
   tes.contraseña2 = 'Papas123';
   expec.contraseña2 = 'Papas123';
-  err.contraseña2 = 'No coinciden contraseñas';
+  err.contraseña2 = 'No coinciden las contraseñas';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -2821,7 +2821,7 @@ it('TC_A_071 No coinciden contraseñas', async () => {
     await termsCheckbox2.click();
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
-    await validarMensajedeError('//android.view.View[@content-desc="Valida que los campos requeridos cumplan con la información solicitada"]',err.contraseña2,'Confirmar Contrasena');
+    await validarMensajedeError('//android.view.View[@content-desc="No coinciden las contraseñas"]',err.contraseña2,'Confirmar Contrasena');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2835,7 +2835,7 @@ it('TC_A_072 confirmar contraseña campos requeridos', async () => {
   const err = { ...errorData };
   tes.contraseña2 = 'Pass1234';
   expec.contraseña2 = 'Pass1234';
-  err.contraseña2 = 'Valida que los campos requeridos cumplan con la información solicitada';
+  err.contraseña2 = 'No coinciden las contraseñas';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -2858,7 +2858,7 @@ it('TC_A_072 confirmar contraseña campos requeridos', async () => {
     await termsCheckbox2.click();
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
-    await validarMensajedeError('//android.view.View[@content-desc="No coinciden contraseñas"]',err.contraseña2,'Confirmar Contrasena');
+    await validarMensajedeError('//android.view.View[@content-desc="No coinciden las contraseñas"]',err.contraseña2,'Confirmar Contrasena');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
