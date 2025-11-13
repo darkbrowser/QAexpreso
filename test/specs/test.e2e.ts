@@ -615,7 +615,7 @@ it('TC_A_013 nombre con 30 caracteres', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('(//android.view.View[@content-desc="Quedan 0 caracteres"])[1]',err.nombre,'Longitud de Caracter');
+    await validarMensajedeError('(//android.view.View[@content-desc="Quedan 30 caracteres"])[1]',err.nombre,'Longitud de Caracter');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -653,7 +653,7 @@ it('TC_A_014 nombre con 29 caracteres', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="Quedan 1 caracteres"]',err.nombre,'Longitud de Caracter');
+    await validarMensajedeError('(//android.view.View[@content-desc="Quedan 1 caracteres"])[1]',err.nombre,'Longitud de Caracter');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -691,7 +691,7 @@ it('TC_A_015 nombre con 31 caracteres', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="Quedan 1 caracteres"]',err.nombre,'Longitud de Caracter');
+    await validarMensajedeError('(//android.view.View[@content-desc="Quedan 0 caracteres"])[1]',err.nombre,'Longitud de Caracter');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -923,7 +923,7 @@ it('TC_A_021 apellido paterno a 30 caracteres', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="Quedan 0 caracteres"]',err.apellidoPaterno,'Longitud de Caracter');
+    await validarMensajedeError('(//android.view.View[@content-desc="Quedan 0 caracteres"])[2]',err.apellidoPaterno,'Longitud de Caracter');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -961,7 +961,7 @@ it('TC_A_022 apellido paterno a 29 caracteres', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="Quedan 1 caracteres"]',err.apellidoPaterno,'Longitud de Caracter');
+    await validarMensajedeError('(//android.view.View[@content-desc="Quedan 1 caracteres"])[2]',err.apellidoPaterno,'Longitud de Caracter');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -999,7 +999,7 @@ it('TC_A_023 apellido paterno a 31 caracteres', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('(//android.view.View[@content-desc="Quedan 0 caracteres"]',err.apellidoPaterno,'Longitud de Caracter');
+    await validarMensajedeError('(//android.view.View[@content-desc="Quedan 0 caracteres"])[2]',err.apellidoPaterno,'Longitud de Caracter');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -1191,7 +1191,7 @@ it('TC_A_028 apellido materno a 30 caracteres', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="Quedan 0 caracteres"]',err.apellidoMaterno,'Longitud de Caracter');
+    await validarMensajedeError('(//android.view.View[@content-desc="Quedan 0 caracteres"])[3]',err.apellidoMaterno,'Longitud de Caracter');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -1229,7 +1229,7 @@ it('TC_A_029 apellido materno a 29 caracteres', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="Quedan 1 caracteres"]',err.apellidoMaterno,'Longitud de Caracter');
+    await validarMensajedeError('(//android.view.View[@content-desc="Quedan 1 caracteres"])[3]',err.apellidoMaterno,'Longitud de Caracter');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -1267,7 +1267,7 @@ it('TC_A_030 apellido materno a 31 caracteres', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="Quedan 0 caracteres"]',err.apellidoMaterno,'Longitud de Caracter');
+    await validarMensajedeError('(//android.view.View[@content-desc="Quedan 0 caracteres"])[3]',err.apellidoMaterno,'Longitud de Caracter');
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
