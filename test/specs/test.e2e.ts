@@ -155,8 +155,8 @@ async function darClicyFoto(selector, label, expectedSelector = null, expectedLa
 
 async function gotoExprezo() {
     await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
-    await driver.pause(16000); // 16 seconds
-    await darClicyFoto('//android.widget.Button[@content-desc="Ignorar"]', 'sin update');
+    //await driver.pause(16000); // 16 seconds
+    //await darClicyFoto('//android.widget.Button[@content-desc="Ignorar"]', 'sin update');
     await darClicyFoto('//android.widget.Button[@content-desc="Regístrate Aquí"]', 'Botón Regístrate Aquí');
     await darClicyFoto('//android.widget.Button[@content-desc="Iniciar periodo de prueba"]', 'Botón Iniciar periodo de prueba');
 }
