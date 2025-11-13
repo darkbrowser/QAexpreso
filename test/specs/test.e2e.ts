@@ -3845,6 +3845,7 @@ it('TC_A_104 doble clic en enviar', async () => {
   err.correo = 'Ya has envíado una solicitud para restaurar tu contraseña, por favor tus mensajes o correo electrónico ; o espera 30 minutos para volver a enviar la solicitud';
   try {
     await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
+    await darClicyFoto('//android.widget.Button[@content-desc="Recuperar contraseña"]', 'Botón Recuperar cuenta');
     await darClicyFoto('//android.widget.Button[@content-desc="Entrar"]"]', 'Botón Enviar 1');
     await darClicyFoto('//android.widget.Button[@content-desc="Entrar"]"]', 'Botón Enviar 2'); 
   } catch (error) {
