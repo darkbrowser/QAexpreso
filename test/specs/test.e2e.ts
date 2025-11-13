@@ -1113,7 +1113,7 @@ it('TC_A_026 apellido materno vacio', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="Ingrese su Apellido"]',err.apellidoMaterno,'Apellido Materno');
+    await validarMensajedeError('(//android.view.View[@content-desc="Ingrese su Apellido"])[2]',err.apellidoMaterno,'Apellido Materno');
     await llegaralFinal();
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
@@ -1152,7 +1152,7 @@ it('TC_A_027 apellido materno caracteres especiales', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('(//android.view.View[@content-desc="ISolo se permiten letras"])[2]',err.apellidoMaterno,'Solo se permiten letras');
+    await validarMensajedeError('(//android.view.View[@content-desc="Solo se permiten letras"])[2]',err.apellidoMaterno,'Solo se permiten letras');
     await llegaralFinal();
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
@@ -1624,7 +1624,7 @@ it('TC_A_040 correo sin @', async () => {
   const err = { ...errorData };
   tes.correo = 'saulsolisggmail.com';
   expec.correo = 'saulsolisggmail.com';
-  err.correo = 'ingrese un correo válido';
+  err.correo = 'Ingrese un correo válido';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -1648,7 +1648,7 @@ it('TC_A_040 correo sin @', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="ingrese un correo válido"]',err.correo,'ingrese un correo válido');
+    await validarMensajedeError('//android.view.View[@content-desc="Ingrese un correo válido"]',err.correo,'Ingrese un correo válido');
     await llegaralFinal();
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
@@ -1663,7 +1663,7 @@ it('TC_A_041 correo con caracteres especiales', async () => {
   const err = { ...errorData };
   tes.correo = '%$#%@$#(*&';
   expec.correo = '%$#%@$#(*&';
-  err.correo = 'ingrese un correo válido';
+  err.correo = 'Ingrese un correo válido';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -1687,7 +1687,7 @@ it('TC_A_041 correo con caracteres especiales', async () => {
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
     await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="ingrese un correo válido"]',err.correo,'ingrese un correo válido');
+    await validarMensajedeError('//android.view.View[@content-desc="Ingrese un correo válido"]',err.correo,'Ingrese un correo válido');
     await llegaralFinal();
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
