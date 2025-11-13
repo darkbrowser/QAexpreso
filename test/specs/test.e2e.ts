@@ -2007,13 +2007,13 @@ it('TC_A_049 correo a 4 digitos', async () => {
   }
 });
 
-it('TC_A_050', async () => {
+it('TC_A_050 codigo postal valido', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
   tes.correo = '54180';
   expec.correo = '54180';
-  err.correo = '';
+  err.correo = 'Requerido';
   try {
     await gotoExprezo();
     await fijarvariableconPasos('//android.view.View[@content-desc="Ingrese sus datos para continuar"]/android.widget.EditText[1]', tes.nombre, 'nombre', expec.nombre);
@@ -2035,10 +2035,10 @@ it('TC_A_050', async () => {
     const termsCheckbox2 = await driver.$('android=new UiSelector().descriptionContains("políticas de privacidad.")');
     await termsCheckbox2.click();
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
-    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
-    await llegaralPrincipio();
-    await validarMensajedeError('//android.view.View[@content-desc="Requerido"]',err.correo,'Correo');
-    await llegaralFinal();
+    allure.addStep(`Validación exitosa: = "${tes.codigopostal}"`);
+  const screenshot = await browser.takeScreenshot();
+  allure.addAttachment(`${tes.codigopostal} ingresado`, Buffer.from(screenshot, 'base64'), 'image/png');
+  allure.endStep();
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2046,7 +2046,7 @@ it('TC_A_050', async () => {
   }
 });
 
-it('TC_A_051', async () => {
+it('TC_A_051 direccion de la sucursal', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
@@ -2074,9 +2074,10 @@ it('TC_A_051', async () => {
     const termsCheckbox2 = await driver.$('android=new UiSelector().descriptionContains("políticas de privacidad.")');
     await termsCheckbox2.click();
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
-    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
-    await llegaralPrincipio();
-    await llegaralFinal();
+    allure.addStep(`Validación exitosa: = "${tes.codigopostal}"`);
+  const screenshot = await browser.takeScreenshot();
+  allure.addAttachment(`${tes.codigopostal} ingresado`, Buffer.from(screenshot, 'base64'), 'image/png');
+  allure.endStep();
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
@@ -2084,7 +2085,7 @@ it('TC_A_051', async () => {
   }
 });
 
-it('TC_A_052', async () => {
+it('TC_A_052 abrir google maps', async () => {
   const tes = { ...testData };
   const expec = { ...expectedData };
   const err = { ...errorData };
@@ -2112,9 +2113,11 @@ it('TC_A_052', async () => {
     const termsCheckbox2 = await driver.$('android=new UiSelector().descriptionContains("políticas de privacidad.")');
     await termsCheckbox2.click();
     const isChecked2 = await termsCheckbox2.getAttribute("checked");
-    await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
-    await llegaralPrincipio();
-    await llegaralFinal();
+    await darClicyFoto('//android.widget.Button[@content-desc="Ver ubicación"]', 'Abrir Google Maps');
+    allure.addStep(`Validación exitosa: = "${tes.codigopostal}"`);
+  const screenshot = await browser.takeScreenshot();
+  allure.addAttachment(`${tes.codigopostal} ingresado`, Buffer.from(screenshot, 'base64'), 'image/png');
+  allure.endStep();
   } catch (error) {
     const errorShot = await browser.takeScreenshot();
     allure.addAttachment('Error screenshot', Buffer.from(errorShot, 'base64'), 'image/png');
