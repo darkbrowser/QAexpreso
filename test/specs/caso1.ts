@@ -6,10 +6,10 @@ const sql = require('mssql');
 async function borracliente(telefono) {
   // Connection configuration
   const config = {
-    user: 'Zrecom02',
-    password: '!202408.!e',
-    server: '192.168.220.220', // e.g. 'localhost' or '192.168.1.100'
-    database: 'ECOMMGZA',
+    user: '',
+    password: '',
+    server: '', // e.g. 'localhost' or '192.168.1.100'
+    database: '',
     options: {
       encrypt: true, // Use true if connecting to Azure SQL
       trustServerCertificate: true // For local dev
@@ -171,7 +171,7 @@ describe('Exprezzo App', () => {
   });
 
   beforeEach(async () => {
-    await borracliente('4427152965');
+    //await borracliente('4427152965');
     await driver.executeScript('mobile:pressKey', [{ keycode: 3 }]);
     await driver.terminateApp("com.android.chrome");
     await driver.terminateApp("mx.com.zorroabarrotero.zorro_expres_app");
