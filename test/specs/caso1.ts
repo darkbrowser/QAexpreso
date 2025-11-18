@@ -8,7 +8,7 @@ async function borracliente(telefono) {
   const config = {
     user: '',
     password: '',
-    server: '', // e.g. 'localhost' or '192.168.1.100'
+    server: '',
     database: '',
     options: {
       encrypt: true, // Use true if connecting to Azure SQL
@@ -24,7 +24,6 @@ async function borracliente(telefono) {
     await request.query(`
       DECLARE @telefono VARCHAR(10) = '${telefono}';
       DECLARE @cli_id INT;
-
       SELECT @cli_id = cli_id 
       FROM ECOMMGZA.ECOMM.te_cliente 
       WHERE cli_tel = @telefono;
@@ -85,22 +84,13 @@ async function llegaralPrincipio() {
 
 async function selectSucursal(){
 
-const el2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(2)");
-await el2.addValue("54180");
-await driver.action('pointer')
-  .move({ duration: 0, x: 140, y: 483 })
-  .down({ button: 0 })
-  .pause(50)
-  .up({ button: 0 })
-  .perform();
+//const el2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(2)");
+//await el2.addValue("54180");
+await driver.action('pointer').move({ duration: 0, x: 140, y: 483 }).down({ button: 0 }).pause(50).move({ duration: 1000, x: 140, y: 483 }).({ button: 0 }).perform();
+//await driver.action('pointer').move({ duration: 0, x: 215, y: 703 }).down({ button: 0 }).move({ duration: 1000, x: 260, y: 715 }).up({ button: 0 }).perform();
 
-await driver.action('pointer')
-  .move({ duration: 0, x: 212, y: 568 })
-  .down({ button: 0 })
-  .pause(50)
-  .up({ button: 0 })
-  .perform();
-
+await driver.action('pointer').move({ duration: 0, x: 212, y: 568 }).down({ button: 0 }).move({ duration: 1000, x: 212, y: 568 }).up({ button: 0 }).perform();
+//await driver.action('pointer').move({ duration: 0, x: 233, y: 802 }).down({ button: 0 }).move({ duration: 1000, x: 233, y: 802 }).up({ button: 0 }).perform();
 }
 
 async function linkterminos() {
