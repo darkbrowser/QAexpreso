@@ -65,16 +65,42 @@ async function borracliente(telefono) {
 }
 
 async function llegaralFinal() {
-    await driver.action('pointer').move({ duration: 0, x: 357, y: 1406 }).down({ button: 0 }).move({ duration: 1000, x: 384, y: 231 }).up({ button: 0 }).perform();
+
+await driver.action('pointer')
+  .move({ duration: 0, x: 336, y: 1214 })
+  .down({ button: 0 })
+  .move({ duration: 1000, x: 360, y: 232 })
+  .up({ button: 0 })
+  .perform();
 }
 
 async function llegaralPrincipio() {
-    await driver.action('pointer').move({ duration: 0, x: 346, y: 349 }).down({ button: 0 }).move({ duration: 1000, x: 338, y: 1553 }).up({ button: 0 }).perform();
+    await driver.action('pointer')
+  .move({ duration: 0, x: 369, y: 149 })
+  .down({ button: 0 })
+  .move({ duration: 1000, x: 356, y: 1188 })
+  .up({ button: 0 })
+  .perform();
 }
 
 async function selectSucursal(){
-    await driver.action('pointer').move({ duration: 0, x: 215, y: 703 }).down({ button: 0 }).move({ duration: 1000, x: 260, y: 715 }).up({ button: 0 }).perform();
-    await driver.action('pointer').move({ duration: 0, x: 233, y: 802 }).down({ button: 0 }).move({ duration: 1000, x: 233, y: 802 }).up({ button: 0 }).perform();
+
+const el2 = await driver.$("-android uiautomator:new UiSelector().className(\"android.widget.EditText\").instance(2)");
+await el2.addValue("54180");
+await driver.action('pointer')
+  .move({ duration: 0, x: 140, y: 483 })
+  .down({ button: 0 })
+  .pause(50)
+  .up({ button: 0 })
+  .perform();
+
+await driver.action('pointer')
+  .move({ duration: 0, x: 212, y: 568 })
+  .down({ button: 0 })
+  .pause(50)
+  .up({ button: 0 })
+  .perform();
+
 }
 
 async function linkterminos() {
@@ -154,8 +180,8 @@ async function darClicyFoto(selector, label, expectedSelector = null, expectedLa
 }
 
 async function gotoExprezo() {
-    await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
-    //await driver.pause(16000); // 16 seconds
+    //await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
+    await driver.pause(6000); // 16 seconds
     //await darClicyFoto('//android.widget.Button[@content-desc="Ignorar"]', 'sin update');
     await darClicyFoto('//android.widget.Button[@content-desc="Regístrate Aquí"]', 'Botón Regístrate Aquí');
     await darClicyFoto('//android.widget.Button[@content-desc="Iniciar periodo de prueba"]', 'Botón Iniciar periodo de prueba');
@@ -171,11 +197,15 @@ describe('Exprezzo App', () => {
   });
 
   beforeEach(async () => {
-    //await borracliente('4427152965');
-    await driver.executeScript('mobile:pressKey', [{ keycode: 3 }]);
-    await driver.terminateApp("com.android.chrome");
-    await driver.terminateApp("mx.com.zorroabarrotero.zorro_expres_app");
+    await borracliente('4427152965');
+    await driver.activateApp("mx.com.zorroabarrotero.zorro_expres_app");
   });
+
+  afterEach(async () => {
+     await driver.terminateApp("mx.com.zorroabarrotero.zorro_expres_app");
+  });
+
+
 
 it('TC_A_037 telefono a 11 digitos', async () => {
   const tes = { ...testData };

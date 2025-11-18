@@ -56,8 +56,8 @@ export const config: WebdriverIO.Config = {
         // capabilities for local Appium web tests on an Android Emulator
          platformName: 'Android',
   'appium:deviceName': 'emulator-5554',
-  'appium:appPackage': 'com.android.chrome',
-  'appium:appActivity': 'com.google.android.apps.chrome.Main',
+  'appium:appPackage': 'mx.com.zorroabarrotero.zorro_expres_app',
+  'appium:appActivity': 'com.example.zorro_expres_app.MainActivity',
   'appium:automationName': 'UiAutomator2'
   //'appium:chromeOptions': {
     //'args': ['--no-first-run']
@@ -103,7 +103,7 @@ export const config: WebdriverIO.Config = {
     //
     // Default timeout in milliseconds for request
     // if browser driver or grid doesn't send response
-    connectionRetryTimeout: 120000,
+    connectionRetryTimeout: 300000,
     //
     // Default request retries count
     connectionRetryCount: 3,
