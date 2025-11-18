@@ -1,6 +1,8 @@
 # QAexpreso
 # 1 instalar dependencias
 npm install
+npm install -g appium
+npm install -g appium-doctor
 # 2 ejecutar pruebas
 npx wdio run wdio.conf.js
 # 3 generar reporte
