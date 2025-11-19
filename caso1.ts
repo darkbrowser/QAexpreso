@@ -6,10 +6,10 @@ const sql = require('mssql');
 async function borracliente(telefono) {
   // Connection configuration
   const config = {
-    user: '',
-    password: '',
-    server: '',
-    database: '',
+    user: 'Zrecom01',
+    password: '!202408.#a',
+    server: 'ecommdbgza-dev.c3gumgc6qtjq.mx-central-1.rds.amazonaws.com', // e.g. 'localhost' or '192.168.1.100'
+    database: 'ECOMMGZA',
     options: {
       encrypt: true, // Use true if connecting to Azure SQL
       trustServerCertificate: true // For local dev

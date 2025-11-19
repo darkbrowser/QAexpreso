@@ -393,7 +393,7 @@ it('TC_A_006 imagen membresia premium', async () => {
   tes.codigoAlta = '//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.View/android.view.View/android.view.View/android.view.View/android.view.View[2]/android.widget.ImageView[2]';
   expec.codigoAlta = '//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.View/android.view.View/android.view.View/android.view.View/android.view.View[2]/android.widget.ImageView[2]';
   try {
-    await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
+    //await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
     await darClicyFoto('//android.widget.Button[@content-desc="Regístrate Aquí"]', 'Botón Regístrate Aquí');
 await validarMensajedeError(tes.codigoAlta,expec.codigoAlta,'Membresia Premnium')
   } catch (error) {
@@ -408,7 +408,7 @@ it('TC_A_007 volver al home', async () => {
   const expec = { ...expectedData };
   const err = { ...errorData };
   try {
-    await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
+    //await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
     await darClicyFoto('//android.widget.Button[@content-desc="Regístrate Aquí"]', 'Botón Regístrate Aquí');
     await driver.back();
     await driver.back();
@@ -429,7 +429,7 @@ it('TC_A_008 volver a pantalla prueba', async () => {
   const expec = { ...expectedData };
   const err = { ...errorData };
   try {
-      await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
+      //await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
     await darClicyFoto('//android.widget.Button[@content-desc="Regístrate Aquí"]', 'Botón Regístrate Aquí');
 await darClicyFoto('//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.View/android.view.View/android.view.View/android.view.View/android.view.View[1]/android.widget.Button', 'Volver');
 allure.startStep(`Volver a Inicio`);    
@@ -3691,7 +3691,7 @@ it('TC_A_094 boton contactar soporte', async () => {
   expec.codigoAlta = '¡Hola! Me gustaria recibir ayuda.';
   err.codigoAlta = '¡Hola! Me gustaria recibir ayuda.';
   try {
-    await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
+    //await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
     await darClicyFoto('//android.widget.FrameLayout[@resource-id="android:id/content"]/android.widget.FrameLayout/android.view.View// /android.view.View/android.view.View/android.view.View/android.widget.ImageView', 'App Exprezzo'); //abre la app
     await fijarvariableconPasos('//android.widget.EditText[@resource-id="com.whatsapp:id/entry"]',tes.codigoAlta,'Whatsapp',err.codigoAlta)
   } catch (error) {
@@ -3706,7 +3706,7 @@ it('TC_A_095 validar lista de sucursales', async () => {
   const expec = { ...expectedData };
   const err = { ...errorData };
   try {
-    await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
+    //await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
 
     await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[1]', tes.correo, 'correo', expec.correo);
     await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[2]', tes.contraseña1, 'contraseña', expec.contraseña1);
@@ -3726,7 +3726,7 @@ it('TC_A_096 pantalla de registro 30 dias', async () => {
   expec.codigoAlta = '//android.view.View[@content-desc="Inicia tu prueba GRATIS de';
   err.codigoAlta = '';
   try {
-    await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
+    //await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
     await darClicyFoto('//android.widget.Button[@content-desc="Regístrate Aquí"]', 'Botón Regístrate Aquí');
     await fijarvariableconPasos('//android.view.View[@content-desc="Inicia tu prueba GRATIS de nuestra membresía por 30 DÍAS"]',tes.codigoAlta,'Membresia 30 dias',err.codigoAlta);
   } catch (error) {
@@ -3744,7 +3744,7 @@ it('TC_A_097 cuenta de correo inexistente', async () => {
   expec.correo = 'pepe@gmail.com';
   err.correo = 'Usuario no registrado';
   try {
-    await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
+    //wait darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
     await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[1]', tes.correo, 'correo', expec.correo);
     await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[2]', tes.contraseña1, 'contraseña', expec.contraseña1);
     await darClicyFoto('//android.widget.Button[@content-desc="Entrar"]', 'Usuario no registrado');
@@ -3763,7 +3763,7 @@ it('TC_A_098 contrasena incorrecta', async () => {
   expec.contraseña1 = '0987654321';
   err.contraseña1 = 'Usuario o contraseña incorrecta.';
   try {
-    await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
+    //await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
     await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[1]', tes.correo, 'correo', expec.correo);
     await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[2]', tes.contraseña1, 'contraseña', expec.contraseña1);
     await darClicyFoto('//android.widget.Button[@content-desc="Entrar"]', 'Usuario o contraseña incorrecta.');
@@ -3779,7 +3779,7 @@ it('TC_A_099 url recuperar contrasena', async () => {
   const expec = { ...expectedData };
   const err = { ...errorData };
   try {
-    await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
+    //await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
     await darClicyFoto('//android.widget.Button[@content-desc="Recuperar contraseña"] boton recuperar', 'Recuperar');
     await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[1]', tes.correo, 'correo', expec.correo);
     await fijarvariableconPasos('//android.view.View[@content-desc="Inicia sesión ¿No tienes una cuenta? "]/android.widget.EditText[2]', tes.contraseña1, 'contraseña', expec.contraseña1);
@@ -3798,7 +3798,7 @@ it('TC_A_100 recuperar correo vacio', async () => {
   tes.correo = '';
   expec.correo = '';
   try {
-    await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
+    //await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
     await darClicyFoto('//android.widget.Button[@content-desc="Recuperar contraseña"] boton recuperar', 'Recuperar');
     await fijarvariableconPasos('//android.widget.EditText', tes.correo, 'correo', expec.correo);
     await darClicyFoto('//android.widget.Button[@content-desc="Entrar"]', 'contraseña vacia');
@@ -3816,7 +3816,7 @@ it('TC_A_101 formato de correo invalido', async () => {
   tes.correo = 'pepegmail.com';
   expec.correo = 'pepegmail.com';
   try {
-    await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
+    //await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
     await darClicyFoto('//android.widget.Button[@content-desc="Recuperar contraseña"] boton recuperar', 'Recuperar');
     await fijarvariableconPasos('//android.widget.EditText', tes.correo, 'correo', expec.correo);
     await darClicyFoto('//android.widget.Button[@content-desc="Entrar"]', 'Formato de correo invalido');
@@ -3835,7 +3835,7 @@ it('TC_A_102 recuperar cuenta existente', async () => {
   expec.nombre = 'saulsolisg@outlook.com';
   err.nombre = 'Se ha enviado un correo';
   try {
-    await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
+    //await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
     await darClicyFoto('//android.widget.Button[@content-desc="Recuperar contraseña"] boton recuperar', 'Recuperar');
     await fijarvariableconPasos('//android.widget.EditText', tes.correo, 'correo', expec.correo);
     await darClicyFoto('//android.widget.Button[@content-desc="Enviar"]', 'Enviar');
@@ -3854,7 +3854,7 @@ it('TC_A_103 correo inexistente', async () => {
   expec.correo = 'ing.saulsolisg@gmail.com';
   err.contraseña1 = 'Usuario no registrado';
   try {
-    await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
+    //await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
     await darClicyFoto('//android.widget.Button[@content-desc="Recuperar contraseña"] boton recuperar', 'Recuperar');
     await fijarvariableconPasos('//android.widget.EditText', tes.correo, 'correo', expec.correo);
     await darClicyFoto('//android.widget.Button[@content-desc="Entrar"]"]', 'Botón Enviar 1');
@@ -3873,7 +3873,7 @@ it('TC_A_104 doble clic en enviar', async () => {
   expec.correo = 'ing.saulsolisg@gmail.com';
   err.correo = 'Ya has envíado una solicitud para restaurar tu contraseña, por favor tus mensajes o correo electrónico ; o espera 30 minutos para volver a enviar la solicitud';
   try {
-    await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
+    //await darClicyFoto('//android.widget.TextView[@content-desc=" Exprezo"]', 'App Exprezzo'); //abre la app
     await darClicyFoto('//android.widget.Button[@content-desc="Recuperar contraseña"]', 'Botón Recuperar cuenta');
     await darClicyFoto('//android.widget.Button[@content-desc="Entrar"]"]', 'Botón Enviar 1');
     await darClicyFoto('//android.widget.Button[@content-desc="Entrar"]"]', 'Botón Enviar 2'); 
